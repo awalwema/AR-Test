@@ -7,6 +7,7 @@ import android.graphics.Color;
 
 import com.example.andrew.ar_test.ui.IconMarker;
 import com.example.andrew.ar_test.ui.Marker;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.jwetherell.augmented_reality.R;
 
 import org.json.JSONArray;
@@ -24,11 +25,14 @@ import java.util.List;
  */
 public class GooglePlacesDataSource extends NetworkDataSource {
 
-	private static final String URL = "https://maps.googleapis.com/maps/api/place/search/json?";
-	private static final String TYPES = "airport|amusement_park|aquarium|art_gallery|bus_station|campground|car_rental|city_hall|embassy|establishment|hindu_temple|local_governemnt_office|mosque|museum|night_club|park|place_of_worship|police|post_office|stadium|spa|subway_station|synagogue|taxi_stand|train_station|travel_agency|University|zoo";
-
+	private static final String URL = "https://maps.googleapis.com/maps/api/place/details/json?";
+	private static final String TYPES = "airport|amusement_park|aquarium|art_gallery|bus_station|campground|car_rental|city_hall|embassy|establishment|hindu_temple|local_governemnt_office|locality|mosque|museum|night_club|park|place_of_worship|police|post_office|stadium|spa|subway_station|synagogue|taxi_stand|train_station|travel_agency|University|zoo";
+    public String place_id = "ChIJ28H074_qJIgRKa9H-XBjNQw";
 	private static String key = null;
 	private static Bitmap icon = null;
+    public String info;
+
+    protected GoogleApiClient mGoogleApiClient;
 
 	public GooglePlacesDataSource(Resources res) {
 		if (res == null) throw new NullPointerException();
@@ -45,14 +49,30 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 	}
 
 	@Override
-	public String createRequestURL(double lat, double lon, double alt, float radius, String locale) {
+	/*public String createRequestURL(double lat, double lon, double alt, float radius, String locale) {
 		try {
-			return URL + "location="+lat+","+lon+"&radius="+(radius*1000.0f)+"&types="+TYPES+"&sensor=true&key="+key;
+
+            return URL + "location="+lat+","+lon+"&radius="+(radius*1000.0f)+"&types="+TYPES+"&sensor=true&key="+key;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
+
+
+    public String createRequestURL(double lat, double lon, double alt, float radius, String locale) {
+        try {
+
+            info = URL + "placeid="+place_id+"&key="+key;
+
+            return  info;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 	/**
 	 * {@inheritDoc}
@@ -90,14 +110,14 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 		List<Marker> markers = new ArrayList<Marker>();
 
 		try {
-			if (root.has("results")) dataArray = root.getJSONArray("results");
-			if (dataArray == null) return markers;
-			int top = Math.min(MAX, dataArray.length());
-			for (int i = 0; i < top; i++) {
-				jo = dataArray.getJSONObject(i);
+			if (root.has("result"))//dataArray = root.getJSONArray("result");
+			//if (dataArray == null) return markers;
+			//int top = Math.min(MAX, dataArray.length());
+			//for (int i = 0; i < top; i++) {
+				jo = root.getJSONObject("result");
 				Marker ma = processJSONObject(jo);
 				if (ma != null) markers.add(ma);
-			}
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -129,4 +149,6 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 		}
 		return ma;
 	}
+
+
 }

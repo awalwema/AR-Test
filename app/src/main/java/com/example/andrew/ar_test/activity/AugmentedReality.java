@@ -64,6 +64,7 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("deprecation")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
