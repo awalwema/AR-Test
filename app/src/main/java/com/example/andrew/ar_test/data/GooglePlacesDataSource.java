@@ -5,12 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
+import com.example.andrew.ar_test.activity.Place;
 import com.example.andrew.ar_test.ui.IconMarker;
 import com.example.andrew.ar_test.ui.Marker;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.jwetherell.augmented_reality.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,12 +26,11 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 
 	private static final String URL = "https://maps.googleapis.com/maps/api/place/details/json?";
 	private static final String TYPES = "airport|amusement_park|aquarium|art_gallery|bus_station|campground|car_rental|city_hall|embassy|establishment|hindu_temple|local_governemnt_office|locality|mosque|museum|night_club|park|place_of_worship|police|post_office|stadium|spa|subway_station|synagogue|taxi_stand|train_station|travel_agency|University|zoo";
-    public String place_id = "ChIJ28H074_qJIgRKa9H-XBjNQw";
 	private static String key = null;
 	private static Bitmap icon = null;
     public String info;
+    public JSONObject place;
 
-    protected GoogleApiClient mGoogleApiClient;
 
 	public GooglePlacesDataSource(Resources res) {
 		if (res == null) throw new NullPointerException();
@@ -49,7 +47,7 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 	}
 
 	@Override
-	/*public String createRequestURL(double lat, double lon, double alt, float radius, String locale) {
+	public String createRequestURL(double lat, double lon, double alt, float radius, String locale) {
 		try {
 
             return URL + "location="+lat+","+lon+"&radius="+(radius*1000.0f)+"&types="+TYPES+"&sensor=true&key="+key;
@@ -58,20 +56,19 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 			e.printStackTrace();
 			return null;
 		}
-	}*/
+	}
 
 
-    public String createRequestURL(double lat, double lon, double alt, float radius, String locale) {
+    public String createRequestURL2(String place_id, String locale) {
         try {
-
-            info = URL + "placeid="+place_id+"&key="+key;
-
+            info = URL + "placeid=" + place_id + "&key=" + key;
             return  info;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
 
 
 	/**
@@ -101,12 +98,26 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 		return parse(json);
 	}
 
+    @Override
+    public List<Marker> parse(List<Place> placeList) {
+        if (placeList == null) throw new NullPointerException();
+
+        List<Marker> markers = new ArrayList<Marker>();
+
+        for (int i = 0; i < placeList.size(); i++)
+        {
+            Marker ma = processJSONObject(placeList.get(i));
+            if (ma != null) markers.add(ma);
+        }
+
+        return markers;
+    }
+
 	@Override
 	public List<Marker> parse(JSONObject root) {
 		if (root == null) throw new NullPointerException();
 
 		JSONObject jo = null;
-		JSONArray dataArray = null;
 		List<Marker> markers = new ArrayList<Marker>();
 
 		try {
@@ -115,6 +126,7 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 			//int top = Math.min(MAX, dataArray.length());
 			//for (int i = 0; i < top; i++) {
 				jo = root.getJSONObject("result");
+
 				Marker ma = processJSONObject(jo);
 				if (ma != null) markers.add(ma);
 
@@ -124,11 +136,26 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 		return markers;
 	}
 
+
+
+    private Marker processJSONObject(Place place) {
+        if (place == null) throw new NullPointerException();
+
+        Marker ma = null;
+
+
+        Double lat = place.getlat();
+        Double lon = place.getlng();
+        String user = place.getUser();
+        String name = place.getName();
+
+         ma = new IconMarker(user + ": " + name, lat, lon, 0, Color.RED, icon);
+        return ma;
+    }
+
 	private Marker processJSONObject(JSONObject jo) {
 		if (jo == null) throw new NullPointerException();
-
-		if (!jo.has("geometry")) throw new NullPointerException();
-
+        setInfo(jo);
 		Marker ma = null;
 		try {
 			Double lat = null, lon = null;
@@ -149,6 +176,16 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 		}
 		return ma;
 	}
+
+    private  void setInfo( JSONObject jo)
+    {
+        place = jo;
+    }
+
+    public JSONObject getInfo()
+    {
+        return  place;
+    }
 
 
 }

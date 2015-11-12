@@ -1,5 +1,6 @@
 package com.example.andrew.ar_test.data;
 
+import com.example.andrew.ar_test.activity.Place;
 import com.example.andrew.ar_test.ui.Marker;
 
 import org.json.JSONException;
@@ -31,8 +32,10 @@ public abstract class NetworkDataSource extends DataSource {
     protected List<Marker> markersCache = null;
 
     public abstract String createRequestURL(double lat, double lon, double alt, float radius, String locale);
+    public abstract String createRequestURL2(String place_id, String locale);
 
     public abstract List<Marker> parse(JSONObject root);
+    public abstract List<Marker> parse(List<Place> placeList);
 
     /**
      * This method get the Markers if they have already been downloaded once.

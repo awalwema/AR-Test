@@ -9,6 +9,8 @@ import com.example.andrew.ar_test.ui.IconMarker;
 import com.example.andrew.ar_test.ui.Marker;
 import com.jwetherell.augmented_reality.R;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,5 +64,10 @@ public class LocalDataSource extends DataSource {
          */
 
         return cachedMarkers;
+    }
+
+    public JSONObject getInfo()
+    {
+        return null;
     }
 }

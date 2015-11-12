@@ -1,5 +1,6 @@
 package com.example.andrew.ar_test.activity;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -20,6 +21,9 @@ import com.example.andrew.ar_test.ui.Marker;
 import com.example.andrew.ar_test.widget.VerticalTextView;
 import com.jwetherell.augmented_reality.R;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -47,6 +51,12 @@ public class Demo extends AugmentedReality {
     private static Toast myToast = null;
     private static VerticalTextView text = null;
 
+    private static String key = null;
+    private static Bitmap icon = null;
+    public static String info;
+    private static final String URL = "https://maps.googleapis.com/maps/api/place/details/json?";
+    public static String place_id;
+    DatabaseHandler db = new DatabaseHandler(this);
     /**
      * {@inheritDoc}
      */
@@ -75,6 +85,8 @@ public class Demo extends AugmentedReality {
 
         NetworkDataSource googlePlaces = new GooglePlacesDataSource(this.getResources());
         sources.put("googlePlaces", googlePlaces);
+
+
     }
 
     /**
@@ -85,7 +97,7 @@ public class Demo extends AugmentedReality {
         super.onStart();
 
         Location last = ARData.getCurrentLocation();
-        updateData(last.getLatitude(), last.getLongitude(), last.getAltitude());
+        initialUpdateData(last.getLatitude(), last.getLongitude(), last.getAltitude());
     }
 
     /**
@@ -128,7 +140,7 @@ public class Demo extends AugmentedReality {
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
 
-        updateData(location.getLatitude(), location.getLongitude(), location.getAltitude());
+        updateData();
     }
 
     /**
@@ -147,16 +159,16 @@ public class Demo extends AugmentedReality {
     protected void updateDataOnZoom() {
         super.updateDataOnZoom();
         Location last = ARData.getCurrentLocation();
-        updateData(last.getLatitude(), last.getLongitude(), last.getAltitude());
+        updateData();
     }
 
-    private void updateData(final double lat, final double lon, final double alt) {
+    private void initialUpdateData(final double lat, final double lon, final double alt) {
         try {
             exeService.execute(new Runnable() {
                 @Override
                 public void run() {
                     for (NetworkDataSource source : sources.values())
-                        download(source, lat, lon, alt);
+                        downloadToDB(source, lat, lon, alt);
                 }
             });
         } catch (RejectedExecutionException rej) {
@@ -166,24 +178,94 @@ public class Demo extends AugmentedReality {
         }
     }
 
-    private static boolean download(NetworkDataSource source, double lat, double lon, double alt) {
+    private void updateData() {
+        try {
+            exeService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    for (NetworkDataSource source : sources.values())
+                        download(source);
+                }
+            });
+        } catch (RejectedExecutionException rej) {
+            Log.w(TAG, "Not running new download Runnable, queue is full.");
+        } catch (Exception e) {
+            Log.e(TAG, "Exception running download Runnable.", e);
+        }
+    }
+
+    private boolean download(NetworkDataSource source) {
         if (source == null) return false;
 
-        String url = null;
+       /* String url = null;
         try {
             url = source.createRequestURL(lat, lon, alt, ARData.getRadius(), locale);
         } catch (NullPointerException e) {
             return false;
-        }
+        }*/
 
         List<Marker> markers = null;
+        ArrayList<Place> placeList;
         try {
-            markers = source.parse(url);
+            placeList = (ArrayList)db.getAllPlaces();
+            markers = source.parse(placeList);
         } catch (NullPointerException e) {
             return false;
         }
 
         ARData.addMarkers(markers);
+        return true;
+    }
+
+    private boolean downloadToDB(NetworkDataSource source, double lat, double lon, double alt) {
+        if (source == null) return false;
+
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("Human Health Building", "ChIJUcxP8pHqJIgRZ1BhRCCmw4k");
+        map.put("Kresge Library", "ChIJ1RzjhWLqJIgRfGY78wBl-Mk");
+        map.put("North Foundation Hall", "ChIJUcxP8pHqJIgRZ1BhRCCmw4k");
+        map.put("Graham Health Center", "ChIJUdsCGY7qJIgR3fN0KGMZGCM");
+        map.put("Meadow Brook Theatre", "ChIJ--0PMo7qJIgRnu4MUriTErQ");
+        map.put("Oakland Center", "ChIJhfKkvo_qJIgRUO1NGq8EzpQ");
+        map.put("South Foundation Hall", "ChIJ28H074_qJIgRKa9H-XBjNQw");
+        map.put("O'Dowd Hall", "ChIJbx5qCY_qJIgRkUYydXg_y_c");
+        map.put("Engineering Center", "ChIJR2vhkIXqJIgRKuKNq_8yXWs");
+        map.put("Hannah Hall", "ChIJ0_zqN4XqJIgRDrkUi23ayZI");
+        map.put("Dodge Hall", "ChIJWVE1E4XqJIgRQc9LBgl_NP8");
+        map.put("Police and Support Services Building", "ChIJsdc6xZrqJIgReA9MsWXcc6s");
+        map.put("Belgian Barn", "ChIJsZTY2ZrqJIgREOWfM0AYpgg");
+        map.put("Elliott Hall", "ChIJGXbs5oXqJIgRE-Zjms68Ogw");
+        map.put("Pawley Hall", "ChIJ4ynfSYbqJIgRUcbCnbHy3B8");
+        map.put("Athletics Center O'Rena", "ChIJwa1XNY_qJIgRWYmP0fx7gpA");
+        map.put("Central Heating Plant", "ChIJuWCS1YjqJIgR0RImzb4LgUI");
+        map.put("Varner Hall", "ChIJy9WBDIbqJIgRxfOuhiVLAxA");
+
+        Iterator it = map.entrySet().iterator();
+        List<Marker> markers = null;
+
+        while (it.hasNext())
+        {
+            Map.Entry pair = (Map.Entry) it.next();
+            //place_id = pair.getValue().toString();
+
+
+            String url = null;
+            try {
+                url = source.createRequestURL2(pair.getValue().toString(), locale);
+            } catch (NullPointerException e) {
+                return false;
+            }
+
+            try {
+                markers = source.parse(url);
+            } catch (NullPointerException e) {
+                return false;
+            }
+
+            ARData.addMarkers(markers);
+            db.addPlace(new Place(source.getInfo()));
+            it.remove();
+        }
         return true;
     }
 }

@@ -2,6 +2,8 @@ package com.example.andrew.ar_test.data;
 
 import com.example.andrew.ar_test.ui.Marker;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 /**
@@ -12,4 +14,6 @@ import java.util.List;
 public abstract class DataSource {
 
     public abstract List<Marker> getMarkers();
+
+    public abstract JSONObject getInfo();
 }
