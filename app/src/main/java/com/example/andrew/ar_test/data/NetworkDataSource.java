@@ -1,6 +1,5 @@
 package com.example.andrew.ar_test.data;
 
-import com.example.andrew.ar_test.activity.Place;
 import com.example.andrew.ar_test.ui.Marker;
 
 import org.json.JSONException;

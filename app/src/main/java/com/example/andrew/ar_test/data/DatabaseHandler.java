@@ -1,4 +1,4 @@
-package com.example.andrew.ar_test.activity;
+package com.example.andrew.ar_test.data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -29,6 +29,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_NAME = "name";
     private static final String KEY_LAT = "latitutde";
     private static final String KEY_LNG = "longitude";
+    private static final String TYPE = "type";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,7 +38,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_LOCATIONS_TABLE = "CREATE TABLE " + TABLE_PLACES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_LAT + " DOUBLE" + KEY_LNG + " DOUBLE" +")";
+                + KEY_LAT + " DOUBLE," + KEY_LNG + " DOUBLE," + TYPE + "INT )";
         db.execSQL(CREATE_LOCATIONS_TABLE);
     }
 
@@ -56,6 +57,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_NAME, place.getName()); //Location Name
         values.put(KEY_LAT, place.getlat()); // Get lat
         values.put(KEY_LNG, place.getlng()); // Get lng
+        values.put(TYPE, place.getType());//int
 
         // Inserting Row
         db.insert(TABLE_PLACES, null, values);
@@ -70,6 +72,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_NAME, place.getName()); // Place Name
         values.put(KEY_LAT, place.getlat()); // lat
         values.put(KEY_LNG, place.getlng());//long
+        values.put(TYPE, place.getType());//int
 
         // Inserting Row
         db.insert(TABLE_PLACES, null, values);
@@ -81,13 +84,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_PLACES, new String[]
-                        { KEY_ID,
-                                KEY_NAME, KEY_LAT, KEY_LNG }, KEY_ID + "=?",
+                        { KEY_ID, KEY_NAME, KEY_LAT, KEY_LNG, TYPE }, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        Place place = new Place(Integer.parseInt(cursor.getString(0)), cursor.getString(1), Double.parseDouble(cursor.getString(2)), Double.parseDouble(cursor.getString(3)));
+        Place place = new Place(Integer.parseInt(cursor.getString(0)), cursor.getString(1),
+                Double.parseDouble(cursor.getString(2)), Double.parseDouble(cursor.getString(3)),
+                Integer.parseInt(cursor.getString(4)));
 
         // return place
         return place;

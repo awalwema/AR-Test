@@ -14,9 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.andrew.ar_test.data.ARData;
+import com.example.andrew.ar_test.data.DatabaseHandler;
 import com.example.andrew.ar_test.data.GooglePlacesDataSource;
 import com.example.andrew.ar_test.data.LocalDataSource;
 import com.example.andrew.ar_test.data.NetworkDataSource;
+import com.example.andrew.ar_test.data.Place;
 import com.example.andrew.ar_test.ui.Marker;
 import com.example.andrew.ar_test.widget.VerticalTextView;
 import com.jwetherell.augmented_reality.R;

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
-import com.example.andrew.ar_test.activity.Place;
 import com.example.andrew.ar_test.ui.IconMarker;
 import com.example.andrew.ar_test.ui.Marker;
 import com.jwetherell.augmented_reality.R;
@@ -25,7 +24,11 @@ import java.util.List;
 public class GooglePlacesDataSource extends NetworkDataSource {
 
 	private static final String URL = "https://maps.googleapis.com/maps/api/place/details/json?";
-	private static final String TYPES = "airport|amusement_park|aquarium|art_gallery|bus_station|campground|car_rental|city_hall|embassy|establishment|hindu_temple|local_governemnt_office|locality|mosque|museum|night_club|park|place_of_worship|police|post_office|stadium|spa|subway_station|synagogue|taxi_stand|train_station|travel_agency|University|zoo";
+	private static final String TYPES = "airport|amusement_park|aquarium|art_gallery|bus_station|" +
+			"campground|car_rental|city_hall|embassy|establishment|hindu_temple|" +
+			"local_governemnt_office|locality|mosque|museum|night_club|park|place_of_worship|" +
+			"police|post_office|stadium|spa|subway_station|synagogue|taxi_stand|train_station|" +
+			"travel_agency|University|zoo";
 	private static String key = null;
 	private static Bitmap icon = null;
     public String info;
