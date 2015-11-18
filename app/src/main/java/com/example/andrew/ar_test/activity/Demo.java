@@ -1,6 +1,5 @@
 package com.example.andrew.ar_test.activity;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -47,18 +46,23 @@ public class Demo extends AugmentedReality {
     private static final String TAG = "Demo";
     private static final String locale = Locale.getDefault().getLanguage();
     private static final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(1);
-    private static final ThreadPoolExecutor exeService = new ThreadPoolExecutor(1, 1, 20, TimeUnit.SECONDS, queue);
-    private static final Map<String, NetworkDataSource> sources = new ConcurrentHashMap<String, NetworkDataSource>();
+    private static final ThreadPoolExecutor exeService =
+            new ThreadPoolExecutor(1, 1, 20, TimeUnit.SECONDS, queue);
+    private static final Map<String, NetworkDataSource> sources =
+            new ConcurrentHashMap<String, NetworkDataSource>();
 
     private static Toast myToast = null;
     private static VerticalTextView text = null;
 
+    /*vote to be removed
     private static String key = null;
     private static Bitmap icon = null;
-    public static String info;
     private static final String URL = "https://maps.googleapis.com/maps/api/place/details/json?";
     public static String place_id;
+    */
+
     DatabaseHandler db = new DatabaseHandler(this);
+    public static String info;
     /**
      * {@inheritDoc}
      */
@@ -87,8 +91,6 @@ public class Demo extends AugmentedReality {
 
         NetworkDataSource googlePlaces = new GooglePlacesDataSource(this.getResources());
         sources.put("googlePlaces", googlePlaces);
-
-
     }
 
     /**

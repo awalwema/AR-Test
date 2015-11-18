@@ -23,6 +23,7 @@ import com.example.andrew.ar_test.data.ARData;
 import com.example.andrew.ar_test.ui.Marker;
 import com.example.andrew.ar_test.widget.VerticalSeekBar;
 import com.example.andrew.ar_test.widget.VerticalTextView;
+import com.jwetherell.augmented_reality.R;
 
 import java.text.DecimalFormat;
 
@@ -69,8 +70,9 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        camScreen = new CameraSurface(this);
-        setContentView(camScreen);
+        //tighted up to xml
+        setContentView(R.layout.activity_main);
+        camScreen = (CameraSurface) findViewById(R.id.cameraSurface);
 
         augmentedView = new AugmentedView(this);
         augmentedView.setOnTouchListener(this);

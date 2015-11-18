@@ -2,6 +2,7 @@ package com.example.andrew.ar_test.camera;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -24,6 +25,30 @@ public class CameraSurface extends SurfaceView implements SurfaceHolder.Callback
 
     public CameraSurface(Context context) {
         super(context);
+
+        try {
+            holder = getHolder();
+            holder.addCallback(this);
+            holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public CameraSurface(Context context, AttributeSet attrs){
+        super(context, attrs);
+
+        try {
+            holder = getHolder();
+            holder.addCallback(this);
+            holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public CameraSurface(Context context, AttributeSet attrs, int defStyle){
+        super(context, attrs, defStyle);
 
         try {
             holder = getHolder();
