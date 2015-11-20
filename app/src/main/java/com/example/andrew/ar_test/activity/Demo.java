@@ -101,7 +101,7 @@ public class Demo extends AugmentedReality {
         super.onStart();
 
         Location last = ARData.getCurrentLocation();
-        initialUpdateData(last.getLatitude(), last.getLongitude(), last.getAltitude());
+        //initialUpdateData(last.getLatitude(), last.getLongitude(), last.getAltitude());
     }
 
     /**

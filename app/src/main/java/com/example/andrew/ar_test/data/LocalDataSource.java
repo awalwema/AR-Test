@@ -39,11 +39,11 @@ public class LocalDataSource extends DataSource {
     }
 
     public List<Marker> getMarkers() {
-        Marker atl = new IconMarker("ATL ICON", 39.931268, -75.051262, 0, Color.DKGRAY, icon);
-        cachedMarkers.add(atl);
+        Marker SFH = new IconMarker("South Foundation Hall", 42.673604, -83.217716, 0, Color.YELLOW, icon);
+        cachedMarkers.add(SFH);
 
-        Marker home = new Marker("ATL CIRCLE", 39.931269, -75.051231, 0, Color.YELLOW);
-        cachedMarkers.add(home);
+        Marker EC = new IconMarker("Engineering Center", 42.671992, -83.214988, 0, Color.YELLOW, icon);
+        cachedMarkers.add(EC);
 
         /*
          * Marker lon = new IconMarker(
