@@ -1,5 +1,8 @@
 package com.example.andrew.ar_test.data;
 
+import android.content.ContentValues;
+import android.content.Context;
+
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -20,11 +23,18 @@ public class Place {
     Double lon = null;
     Integer type;
     int id;
+    ContentValues container;
+    Context cont;
+
     public static final  HashMap<String, Integer> map = new HashMap<String, Integer>();
 
     // Empty constructor
     public Place(){
 
+    }
+
+    public Place(Context cont){
+        this.cont = cont;
     }
 
     public Place(int id,String name, Double lat, Double lon, Integer type){
@@ -36,6 +46,7 @@ public class Place {
     }
 
     public Place(JSONObject loc){
+        container = new ContentValues();
 
         try {
             jo = loc;
@@ -52,8 +63,16 @@ public class Place {
             }
 
             if(name != null){
-                filterType(name);
+                type = filterType(name);
             }
+
+            // Testing DatabaseHelper class instead of handler
+            container.put(DatabaseHelper.PLACE_NAME, name);
+            container.put(DatabaseHelper.PLACE_LONG, lon.toString());
+            container.put(DatabaseHelper.PLACE_LATI, lat.toString());
+            container.put(DatabaseHelper.PLACE_TYPE, type.toString());
+            DatabaseHelper.getInstance(cont).addPlace(container);
+
         }
         catch (Exception e)
         {
@@ -78,7 +97,7 @@ public class Place {
         return this.user;
     }
 
-    public Integer getType() { return this.type; }
+    public Integer getType() { return filterType(name); }
 
     public int getID()
     {
@@ -112,7 +131,7 @@ public class Place {
         return this.jo;
     }
 
-    private void filterType( String name ){
+    private Integer filterType( String name ) {
         map.put("Human Health Building", 238);
         map.put("Kresge Library", 19);
         map.put("North Foundation Hall", 34);
@@ -133,16 +152,15 @@ public class Place {
         map.put("Varner Hall", 32);
 
         Iterator it = map.entrySet().iterator();
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             Map.Entry pair = (Map.Entry) it.next();
             //place_id = pair.getValue().toString();
 
-            if(pair.getKey().toString().equalsIgnoreCase(name)){
-                type = (Integer) pair.getValue();
-                setType(type);
-                break;
+            if (pair.getKey().toString().equalsIgnoreCase(name)) {
+                return (Integer) pair.getValue();
             }
         }
+
+        return 0;
     }
 }

@@ -167,18 +167,24 @@ public class Demo extends AugmentedReality {
     }
 
     private void initialUpdateData(final double lat, final double lon, final double alt) {
-        try {
-            exeService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    for (NetworkDataSource source : sources.values())
-                        downloadToDB(source, lat, lon, alt);
-                }
-            });
-        } catch (RejectedExecutionException rej) {
-            Log.w(TAG, "Not running new download Runnable, queue is full.");
-        } catch (Exception e) {
-            Log.e(TAG, "Exception running download Runnable.", e);
+        if(db.getPlacesCount()==0) {
+
+            try {
+                exeService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (NetworkDataSource source : sources.values())
+                            saveToDB(source, lat, lon, alt);
+                    }
+                });
+            } catch (RejectedExecutionException rej) {
+                Log.w(TAG, "Not running new download Runnable, queue is full.");
+            } catch (Exception e) {
+                Log.e(TAG, "Exception running download Runnable.", e);
+            }
+        }
+        else {
+            Toast.makeText(this, "Lock and load bithc", Toast.LENGTH_LONG);
         }
     }
 
@@ -221,7 +227,7 @@ public class Demo extends AugmentedReality {
         return true;
     }
 
-    private boolean downloadToDB(NetworkDataSource source, double lat, double lon, double alt) {
+    private boolean saveToDB(NetworkDataSource source, double lat, double lon, double alt) {
         if (source == null) return false;
 
         HashMap<String, String> map = new HashMap<String, String>();
