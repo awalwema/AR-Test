@@ -35,6 +35,7 @@ public abstract class NetworkDataSource extends DataSource {
 
     public abstract List<Marker> parse(JSONObject root);
     public abstract List<Marker> parse(List<Place> placeList);
+    public abstract List<Marker> parse(Place place);
 
     /**
      * This method get the Markers if they have already been downloaded once.

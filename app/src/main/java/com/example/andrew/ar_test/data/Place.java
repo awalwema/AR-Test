@@ -43,6 +43,7 @@ public class Place {
         this.lat = lat;
         this.lon = lon;
         this.type = type;
+        this.user = name;
     }
 
     public Place(JSONObject loc){
@@ -119,6 +120,11 @@ public class Place {
         this.name = name;
     }
 
+    public void setUser( String name)
+    {
+        this.user = name;
+    }
+
     public void setType(Integer type){ this.type = type; }
 
     public void setID(int id)
@@ -132,7 +138,7 @@ public class Place {
     }
 
     private Integer filterType( String name ) {
-        map.put("Human Health Building", 238);
+        map.put("Human Health Building - Oakland University", 238);
         map.put("Kresge Library", 19);
         map.put("North Foundation Hall", 34);
         map.put("Graham Health Center", 17);

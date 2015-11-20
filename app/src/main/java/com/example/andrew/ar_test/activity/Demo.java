@@ -218,12 +218,15 @@ public class Demo extends AugmentedReality {
         ArrayList<Place> placeList;
         try {
             placeList = (ArrayList)db.getAllPlaces();
-            markers = source.parse(placeList);
+
+            for(int i= 0 ; i<placeList.size(); i++){
+                markers = source.parse(placeList.get(i));
+                ARData.addMarkers(markers);
+            }
         } catch (NullPointerException e) {
             return false;
         }
 
-        ARData.addMarkers(markers);
         return true;
     }
 
@@ -233,7 +236,7 @@ public class Demo extends AugmentedReality {
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("Human Health Building", "ChIJUcxP8pHqJIgRZ1BhRCCmw4k");
         map.put("Kresge Library", "ChIJ1RzjhWLqJIgRfGY78wBl-Mk");
-        map.put("North Foundation Hall", "ChIJUcxP8pHqJIgRZ1BhRCCmw4k");
+        map.put("North Foundation Hall", "ChIJQ2tJ24_qJIgR3bajTTz9ktY");
         map.put("Graham Health Center", "ChIJUdsCGY7qJIgR3fN0KGMZGCM");
         map.put("Meadow Brook Theatre", "ChIJ--0PMo7qJIgRnu4MUriTErQ");
         map.put("Oakland Center", "ChIJhfKkvo_qJIgRUO1NGq8EzpQ");

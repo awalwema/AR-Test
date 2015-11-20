@@ -116,6 +116,19 @@ public class GooglePlacesDataSource extends NetworkDataSource {
         return markers;
     }
 
+
+	@Override
+    public List<Marker> parse(Place place) {
+        if (place == null) throw new NullPointerException();
+
+        List<Marker> markers = new ArrayList<Marker>();
+
+		Marker ma = processJSONObject(place);
+		if (ma != null) markers.add(ma);
+
+        return markers;
+    }
+
 	@Override
 	public List<Marker> parse(JSONObject root) {
 		if (root == null) throw new NullPointerException();

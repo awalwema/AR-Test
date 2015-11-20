@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,8 +83,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Inserting Row
         db.insert(TABLE_PLACES, null, values);
         db.close(); // Closing database connection
-
-        Log.e("BREADCRUMBING: ", "/nFIRST STEP -- ADDING/n");
     }
 
     // Getting single contact
@@ -136,9 +133,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 Place place = new Place(temp);
                 place.setID(Integer.parseInt(cursor.getString(0)));
+                place.setUser(cursor.getString(1));
                 place.setName(cursor.getString(1));
                 place.selat(Double.parseDouble(cursor.getString(2)));
                 place.setlng(Double.parseDouble(cursor.getString(3)));
+                place.setType(Integer.parseInt(cursor.getString(4)));
                 // Adding places to list
                 placeList.add(place);
             } while (cursor.moveToNext());
