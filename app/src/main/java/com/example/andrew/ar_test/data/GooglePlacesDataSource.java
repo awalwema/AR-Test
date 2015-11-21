@@ -165,7 +165,7 @@ public class GooglePlacesDataSource extends NetworkDataSource {
         String user = place.getUser();
         String name = place.getName();
 
-         ma = new IconMarker(user + ": " + name, lat, lon, 0, Color.RED, icon);
+         ma = new IconMarker(user + ": " + name, lat, lon, 0, Color.RED, icon, 0);
         return ma;
     }
 
@@ -185,7 +185,7 @@ public class GooglePlacesDataSource extends NetworkDataSource {
 			if (lat != null) {
 				String user = jo.getString("name");
 
-				ma = new IconMarker(user + ": " + jo.getString("name"), lat, lon, 0, Color.RED, icon);
+				ma = new IconMarker(user + ": " + jo.getString("name"), lat, lon, 0, Color.RED, icon, 0);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
