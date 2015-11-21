@@ -135,7 +135,7 @@ public class LocalDataSource extends DataSource {
         cachedMarkers.add(UF);
 
         Marker OBF = new IconMarker("Oakland Baseball Field", 42.673324249925194, -83.21135580539703, 0, Color.YELLOW, icon, 14641);
-                cachedMarkers.add(OBF);
+        cachedMarkers.add(OBF);
 
         Marker MBT = new IconMarker("Meadow Brook Theater", 42.67601849282903, -83.2179731503129, 0, Color.YELLOW, icon, 23);
         cachedMarkers.add(MBT);
@@ -146,7 +146,7 @@ public class LocalDataSource extends DataSource {
         Marker MBMF = new IconMarker("Meadow Brook Musical Festival", 42.67629308705625, -83.20305772125721, 0, Color.YELLOW, icon, 124627);
         cachedMarkers.add(MBMF);
 
-        Marker ST = new IconMarker("Sunset Tarrance", 42.673648896361826, -83.21774147450924, 0, Color.YELLOW, icon, 9);
+        Marker ST = new IconMarker("Sunset Terrace", 42.67598768101327, -83.198696449399, 0, Color.YELLOW, icon, 9);
         cachedMarkers.add(ST);
 
         Marker SGP = new IconMarker("Shotwell-Gustafson Pavilion", 42.6736952390709456, -83.19764737039804, 0, Color.YELLOW, icon, 2401);

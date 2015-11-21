@@ -188,7 +188,7 @@ public class Demo extends AugmentedReality {
         }
     }
 
-    private void updateData() {
+    private void updateDataOriginal() {
         try {
             exeService.execute(new Runnable() {
                 @Override
@@ -202,6 +202,11 @@ public class Demo extends AugmentedReality {
         } catch (Exception e) {
             Log.e(TAG, "Exception running download Runnable.", e);
         }
+    }
+
+    private void updateData() {
+        LocalDataSource localData = new LocalDataSource(this.getResources());
+        ARData.addMarkers(localData.getMarkers());
     }
 
     private boolean download(NetworkDataSource source) {

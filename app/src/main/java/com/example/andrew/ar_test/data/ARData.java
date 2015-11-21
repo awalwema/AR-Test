@@ -31,10 +31,10 @@ public abstract class ARData {
     private static final float[] locationArray = new float[3];
 
     /* defaulting to our place */
-    public static final Location hardFix = new Location("ATL");
+    public static final Location hardFix = new Location("Kresge Library");
     static {
-        hardFix.setLatitude(39.931261);
-        hardFix.setLongitude(-75.051267);
+        hardFix.setLatitude(42.672655477850896);
+        hardFix.setLongitude(-83.21593601256609);
         hardFix.setAltitude(1);
     }
 
