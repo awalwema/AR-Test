@@ -128,7 +128,7 @@ public class LocalDataSource extends DataSource {
         Marker ACO = new IconMarker("Athletics Center O’Rena", 42.67408619267781, -83.21286890655756, 0, Color.YELLOW, icon, 11);
         cachedMarkers.add(ACO);
 
-        Marker PHL = new IconMarker("Pioener Field (Lower Field)", 42.673026964001444, -83.20769492536783, 0, Color.YELLOW, icon, 121);
+        Marker PHL = new IconMarker("Pioneer Field (Lower Field)", 42.673026964001444, -83.20769492536783, 0, Color.YELLOW, icon, 121);
         cachedMarkers.add(PHL);
 
         Marker UF = new IconMarker("Upper Field", 42.67754550727726, -83.21012634783983, 0, Color.YELLOW, icon, 1331);
