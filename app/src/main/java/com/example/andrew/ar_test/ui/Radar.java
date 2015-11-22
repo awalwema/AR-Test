@@ -24,10 +24,10 @@ public class Radar {
 
     public static final float RADIUS = 200;
 
-    private static final int LINE_COLOR = Color.argb(150, 0, 0, 220);
+    private static final int LINE_COLOR = Color.argb(255, 255, 255, 255);
     private static final float PAD_X = 10;
     private static final float PAD_Y = 10;
-    private static final int RADAR_COLOR = Color.argb(100, 0, 0, 200);
+    private static final int RADAR_COLOR = Color.argb(150, 0, 0,0);
     private static final int TEXT_COLOR = Color.rgb(255, 255, 255);
     private static final int TEXT_SIZE = 25;
 
