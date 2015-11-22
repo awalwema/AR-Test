@@ -280,7 +280,7 @@ public class Demo extends AugmentedReality {
                 return false;
             }
 
-            ARData.addMarkers(markers);
+            //ARData.addMarkers(markers);
             db.addPlace(new Place(source.getInfo()));
             it.remove();
         }

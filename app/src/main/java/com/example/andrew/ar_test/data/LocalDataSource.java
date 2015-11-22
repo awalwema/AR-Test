@@ -49,6 +49,9 @@ public class LocalDataSource extends DataSource {
 
         cachedMarkers.add(HHB);
 
+        Marker REC = new IconMarker("Rec Center", 42.673605265162614, -83.2130965590477, 0, Color.YELLOW, icon, 17);
+        cachedMarkers.add(REC);
+
         Marker NFH = new IconMarker("North Foundation Hall", 42.67426835748442, -83.21780283004045, 0, Color.YELLOW, icon, 34);
         cachedMarkers.add(NFH);
 
@@ -128,10 +131,10 @@ public class LocalDataSource extends DataSource {
         Marker ACO = new IconMarker("Athletics Center O’Rena", 42.67408619267781, -83.21286890655756, 0, Color.YELLOW, icon, 11);
         cachedMarkers.add(ACO);
 
-        Marker PHL = new IconMarker("Pioneer Field (Lower Field)", 42.673026964001444, -83.20769492536783, 0, Color.YELLOW, icon, 121);
+        Marker PHL = new IconMarker("Pioneer Field (Lower Fields)", 42.673026964001444, -83.20769492536783, 0, Color.YELLOW, icon, 121);
         cachedMarkers.add(PHL);
 
-        Marker UF = new IconMarker("Upper Field", 42.67754550727726, -83.21012634783983, 0, Color.YELLOW, icon, 1331);
+        Marker UF = new IconMarker("Upper Fields", 42.67754550727726, -83.21012634783983, 0, Color.YELLOW, icon, 1331);
         cachedMarkers.add(UF);
 
         Marker OBF = new IconMarker("Oakland Baseball Field", 42.673324249925194, -83.21135580539703, 0, Color.YELLOW, icon, 14641);

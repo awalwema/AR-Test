@@ -1,14 +1,12 @@
 package com.example.andrew.ar_test.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.hardware.GeomagneticField;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +16,15 @@ import com.example.andrew.ar_test.common.Matrix;
 import com.example.andrew.ar_test.common.Navigation;
 import com.example.andrew.ar_test.common.Orientation;
 import com.example.andrew.ar_test.data.ARData;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,19 +34,24 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
-public class SensorsActivity extends Activity implements SensorEventListener, LocationListener {
+public class SensorsActivity extends Activity implements SensorEventListener, LocationListener, GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "SensorsActivity";
     private static final AtomicBoolean computing = new AtomicBoolean(false);
-
-    private static final int MIN_TIME = 30 * 1000;
-    private static final int MIN_DISTANCE = 10;
+    private static final int MIN_TIME = 3000;
+    private static final int MIN_DISTANCE = 1;
 
     private static final float temp[] = new float[9]; // Temporary rotation matrix in Android format
     private static final float rotation[] = new float[9]; // Final rotation matrix in Android format
     private static final float grav[] = new float[3]; // Gravity (a.k.a accelerometer data)
     private static final float mag[] = new float[3]; // Magnetic
 
+    private static final long INTERVAL = 1000 * 10;
+    private static final long FASTEST_INTERVAL = 1000 * 5;
+    LocationRequest mLocationRequest;
+    GoogleApiClient mGoogleApiClient;
+    Location mCurrentLocation;
+    String mLastUpdateTime;
     /*
      * Using Matrix operations instead. This was way too inaccurate, private
      * static final float apr[] = new float[3]; //Azimuth, pitch, roll
@@ -59,13 +71,33 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
     private static Sensor sensorMag = null;
     private static LocationManager locationMgr = null;
 
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "onCreate ...............................");
+        //show error dialog if GooglePlayServices not available
+        if (!isGooglePlayServicesAvailable()) {
+            finish();
+        }
+        createLocationRequest();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
     }
+
 
     /**
      * {@inheritDoc}
@@ -73,6 +105,8 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
     @Override
     public void onStart() {
         super.onStart();
+        //New location testing for accuracy
+        mGoogleApiClient.connect();
 
         float neg90rads = (float)Math.toRadians(-90);
 
@@ -88,9 +122,9 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
         // [ cos,  0,   sin ]
         // [ 0,    1,   0   ]
         // [ -sin, 0,   cos ]
-        yAxisRotation.set((float)Math.cos(neg90rads),  0f, (float)Math.sin(neg90rads),
-                          0f,                        1f, 0f,
-                          -(float)Math.sin(neg90rads), 0f, (float)Math.cos(neg90rads));
+        yAxisRotation.set((float) Math.cos(neg90rads), 0f, (float) Math.sin(neg90rads),
+                0f, 1f, 0f,
+                -(float) Math.sin(neg90rads), 0f, (float) Math.cos(neg90rads));
 
         try {
             sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -106,14 +140,22 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
             sensorMgr.registerListener(this, sensorGrav, SensorManager.SENSOR_DELAY_UI);
             sensorMgr.registerListener(this, sensorMag, SensorManager.SENSOR_DELAY_UI);
 
-            locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationMgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME, MIN_DISTANCE, this);
+            //locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            //locationMgr.requestLocationUpdates(mGoogleApiClient, mCurrentLocation, mLocationRequest );
+
+
+
+            FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
+
+
+
+
 
             try {
 
                 try {
-                    Location gps = locationMgr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    Location network = locationMgr.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    Location gps = locationMgr.getLastKnownLocation(mCurrentLocation.getProvider());
+                    Location network = locationMgr.getLastKnownLocation(mCurrentLocation.getProvider());
                     if (gps != null) onLocationChanged(gps);
                     else if (network != null) onLocationChanged(network);
                     else onLocationChanged(ARData.hardFix);
@@ -162,7 +204,7 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
                     sensorMgr = null;
                 }
                 if (locationMgr != null) {
-                    locationMgr.removeUpdates(this);
+                    //locationMgr.removeUpdates(this);
                     locationMgr = null;
                 }
             } catch (Exception ex2) {
@@ -177,7 +219,7 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
     @Override
     protected void onStop() {
         super.onStop();
-
+        mGoogleApiClient.disconnect();
         try {
             try {
                 sensorMgr.unregisterListener(this, sensorGrav);
@@ -192,7 +234,7 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
             sensorMgr = null;
 
             try {
-                locationMgr.removeUpdates(this);
+                //locationMgr.removeUpdates(this);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -200,6 +242,36 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private boolean isGooglePlayServicesAvailable() {
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (ConnectionResult.SUCCESS == status) {
+            return true;
+        } else {
+            GooglePlayServicesUtil.getErrorDialog(status, this, 0).show();
+            return false;
+        }
+    }
+
+    public void onConnected(Bundle bundle) {
+        Log.d(TAG, "onConnected - isConnected ...............: " + mGoogleApiClient.isConnected());
+        startLocationUpdates();
+    }
+
+    protected void startLocationUpdates() {
+        PendingResult<Status> pendingResult = LocationServices.FusedLocationApi.requestLocationUpdates
+                (mGoogleApiClient, mLocationRequest, this);
+        Log.d(TAG, "Location update started ..............: ");
+    }
+
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d(TAG, "Connection failed: " + connectionResult.toString());
     }
 
     /**
@@ -296,7 +368,7 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
     /**
      * {@inheritDoc}
      */
-    @Override
+
     public void onProviderDisabled(String provider) {
         // Ignore
     }
@@ -304,7 +376,7 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
     /**
      * {@inheritDoc}
      */
-    @Override
+
     public void onProviderEnabled(String provider) {
         // Ignore
     }
@@ -312,7 +384,7 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
     /**
      * {@inheritDoc}
      */
-    @Override
+
     public void onStatusChanged(String provider, int status, Bundle extras) {
         // Ignore
     }
@@ -322,7 +394,8 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
      */
     @Override
     public void onLocationChanged(Location location) {
-        ARData.setCurrentLocation(location);
+        mCurrentLocation = location;
+        ARData.setCurrentLocation(mCurrentLocation);
         gmf = new GeomagneticField((float) ARData.getCurrentLocation().getLatitude(), 
                                    (float) ARData.getCurrentLocation().getLongitude(), 
                                    (float) ARData.getCurrentLocation().getAltitude(), System.currentTimeMillis());
@@ -335,6 +408,25 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
             mageticNorthCompensation.set((float)Math.cos(dec), 0f, (float)Math.sin(dec),
                                          0f,                 1f, 0f, 
                                          -(float)Math.sin(dec), 0f, (float)Math.cos(dec));
+        }
+    }
+
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        Log.d(TAG, "Location update stopped .......................");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mGoogleApiClient.isConnected()) {
+            startLocationUpdates();
+            Log.d(TAG, "Location update resumed .....................");
         }
     }
 
