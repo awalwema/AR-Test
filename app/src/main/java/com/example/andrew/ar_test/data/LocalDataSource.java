@@ -93,7 +93,7 @@ public class LocalDataSource extends DataSource {
         Marker PSSB = new IconMarker("Police and Support Services Building", 42.67131791211299, -83.21899976581335, 0, Color.YELLOW, icon, 289);
         cachedMarkers.add(PSSB);
 
-        Marker OVH = new IconMarker("Oak View Hall", 42.67804932754033, -83.21572311222553, 0, Color.YELLOW, icon, 85);
+        Marker OVH = new IconMarker("Oak View Hall", 42.67804932754033, -83.21572311222553, 0, Color.YELLOW, icon, 3125);
         cachedMarkers.add(OVH);
 
         Marker FH = new IconMarker("Fitzgerald House", 42.67562681188996, -83.21485407650471, 0, Color.YELLOW, icon, 25);
@@ -106,7 +106,7 @@ public class LocalDataSource extends DataSource {
         cachedMarkers.add(VWH);
 
 
-        Marker HmH = new IconMarker("Hamlin Hall", 42.67710897477371, -83.21379460394382, 0, Color.YELLOW, icon, 3125);
+        Marker HmH = new IconMarker("Hamlin Hall", 42.67710897477371, -83.21379460394382, 0, Color.YELLOW, icon, 85);
         cachedMarkers.add(HmH);
 
 
