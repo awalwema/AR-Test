@@ -1,4 +1,5 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/showRadar"
         android:title="Hide Radar">
     </item>
@@ -8,4 +9,9 @@
     <item android:id="@+id/exit"
         android:title="Exit">
     </item>
+
+    <!--NavDrawer element-->
+    <item android:id="@+id/action_example"
+        android:title="@string/action_example"
+        app:showAsAction="withText|ifRoom" />
 </menu>

@@ -21,6 +21,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import com.example.andrew.ar_test.camera.CameraSurface;
 import com.example.andrew.ar_test.data.ARData;
 import com.example.andrew.ar_test.ui.Marker;
+import com.example.andrew.ar_test.ui.NavDrawer;
 import com.example.andrew.ar_test.widget.VerticalSeekBar;
 import com.example.andrew.ar_test.widget.VerticalTextView;
 import com.jwetherell.augmented_reality.R;
@@ -33,8 +34,9 @@ import java.text.DecimalFormat;
  * 
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
-public class AugmentedReality extends SensorsActivity implements OnTouchListener {
-
+public class AugmentedReality extends SensorsActivity implements OnTouchListener,
+        NavDrawer.NavigationDrawerCallbacks
+{
     private static final String TAG = "AugmentedReality";
     private static final DecimalFormat FORMAT = new DecimalFormat("#.##");
     private static final int ZOOMBAR_BACKGROUND_COLOR = Color.argb(125, 55, 55, 55);
@@ -76,7 +78,8 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
 
         augmentedView = new AugmentedView(this);
         augmentedView.setOnTouchListener(this);
-        LayoutParams augLayout = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LayoutParams augLayout = new LayoutParams(LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT);
         addContentView(augmentedView, augLayout);
 
         zoomLayout = new LinearLayout(this);
@@ -88,7 +91,8 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
         endLabel = new VerticalTextView(this);
         endLabel.setText(END_TEXT);
         endLabel.setTextColor(END_TEXT_COLOR);
-        LinearLayout.LayoutParams zoomTextParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams zoomTextParams = new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         zoomTextParams.gravity = Gravity.CENTER;
         zoomLayout.addView(endLabel, zoomTextParams);
 
@@ -96,11 +100,13 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
         myZoomBar.setMax(100);
         myZoomBar.setProgress(50);
         myZoomBar.setOnSeekBarChangeListener(myZoomBarOnSeekBarChangeListener);
-        LinearLayout.LayoutParams zoomBarParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+        LinearLayout.LayoutParams zoomBarParams = new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
         zoomBarParams.gravity = Gravity.CENTER_HORIZONTAL;
         zoomLayout.addView(myZoomBar, zoomBarParams);
 
-        FrameLayout.LayoutParams frameLayoutParams = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT, Gravity.RIGHT);
+        FrameLayout.LayoutParams frameLayoutParams = new FrameLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT, Gravity.RIGHT);
         addContentView(zoomLayout, frameLayoutParams);
 
         updateDataOnZoom();
@@ -136,7 +142,8 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
     public void onSensorChanged(SensorEvent evt) {
         super.onSensorChanged(evt);
 
-        if (evt.sensor.getType() == Sensor.TYPE_ACCELEROMETER || evt.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+        if (evt.sensor.getType() == Sensor.TYPE_ACCELEROMETER ||
+                evt.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             augmentedView.postInvalidate();
         }
     }
@@ -210,5 +217,10 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
 
     protected void markerTouched(Marker marker) {
         Log.w(TAG, "markerTouched() not implemented. marker="+marker.getName());
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+
     }
 }
