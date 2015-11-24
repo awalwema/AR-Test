@@ -180,7 +180,7 @@ public class LocalDataSource extends DataSource {
                 -83.21095749735832, 0, Color.YELLOW, 121, icon);
         cachedMarkers.add(PHL);
 
-        Marker UF = new IconMarker("Upper Fields", 42.677864708945506, -83.21027956902981, 0,
+        Marker UF = new IconMarker("Recreation and Athletic Complex", 42.677864708945506, -83.21027956902981, 0,
                 Color.YELLOW, 1331, icon);
         cachedMarkers.add(UF);
 
