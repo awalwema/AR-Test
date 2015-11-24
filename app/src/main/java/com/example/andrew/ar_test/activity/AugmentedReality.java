@@ -62,6 +62,7 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
     public static boolean useDataSmoothing = true;
     public static boolean useCollisionDetection = false; // defaulted OFF
 
+
     /**
      * {@inheritDoc}
      */
@@ -107,6 +108,7 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
+
     }
 
     /**
