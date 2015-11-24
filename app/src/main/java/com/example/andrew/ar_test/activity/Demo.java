@@ -1,5 +1,6 @@
 package com.example.andrew.ar_test.activity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -91,6 +92,14 @@ public class Demo extends AugmentedReality {
 
         NetworkDataSource googlePlaces = new GooglePlacesDataSource(this.getResources());
         sources.put("googlePlaces", googlePlaces);
+
+        Context context = getApplicationContext();
+        CharSequence text = "Swipe from left to filter!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+
     }
 
     /**
