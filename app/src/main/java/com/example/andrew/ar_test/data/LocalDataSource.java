@@ -41,6 +41,7 @@ public class LocalDataSource extends DataSource {
     }
 
     private void setMarkers(){
+        // Educational Buildings (Mainly)
         Marker SFH = new IconMarker("South Foundation Hall", 42.673648896361826, -83.21774147450924,
                 0, Color.YELLOW, 2, icon);
         cachedMarkers.add(SFH);
@@ -52,14 +53,6 @@ public class LocalDataSource extends DataSource {
         Marker HHB = new IconMarker("Human Health Building", 42.67746835635772, -83.2193286716938,
                 0, Color.YELLOW, 14, icon);
         cachedMarkers.add(HHB);
-
-        Marker REC = new IconMarker("Rec Center", 42.673605265162614, -83.2130965590477, 0,
-                Color.YELLOW, 17, icon);
-        cachedMarkers.add(REC);
-
-        Marker NFH = new IconMarker("North Foundation Hall", 42.67426835748442, -83.21780283004045,
-                0, Color.YELLOW, 34, icon);
-        cachedMarkers.add(NFH);
 
         Marker OH = new IconMarker("O’Dowd Hall", 42.6743275177939, -83.2153657078743, 0,
                 Color.YELLOW, 28, icon);
@@ -89,10 +82,7 @@ public class LocalDataSource extends DataSource {
                 Color.YELLOW, 46, icon);
         cachedMarkers.add(VH);
 
-        Marker VDH = new IconMarker("Vandenberg Hall", 42.67688195694066, -83.21583610028028, 0,
-                Color.YELLOW, 5, icon);
-        cachedMarkers.add(VDH);
-
+        // Labs (Mainly)
         Marker BB = new IconMarker("Belgian Barn", 42.67080195803381, -83.2189129292965, 0,
                 Color.YELLOW, 7, icon);
         cachedMarkers.add(BB);
@@ -100,9 +90,23 @@ public class LocalDataSource extends DataSource {
         Marker KML = new IconMarker("Kettering Magnetics Lab", 42.660792390349215,
                 -83.21437798440456, 0, Color.YELLOW, 49, icon);
         cachedMarkers.add(KML);
+
         Marker OBS = new IconMarker("Observatory", 42.660182410654365, -83.2153831422329, 0,
                 Color.YELLOW, 343, icon);
         cachedMarkers.add(OBS);
+
+        Marker SGP = new IconMarker("Shotwell-Gustafson Pavilion", 42.6736952390709456,
+                -83.19764737039804, 0, Color.YELLOW, 2401, icon);
+        cachedMarkers.add(SGP);
+
+        Marker MBG = new IconMarker("Meadow Brook Greenhouse", 42.673366155786844,
+                -83.1945001333952, 0, Color.YELLOW, 16807, icon);
+        cachedMarkers.add(MBG);
+
+        // Administration Buildings (Mainly)
+        Marker NFH = new IconMarker("North Foundation Hall", 42.67426835748442, -83.21780283004045,
+                0, Color.YELLOW, 34, icon);
+        cachedMarkers.add(NFH);
 
         Marker GHC = new IconMarker("Graham Health Center", 42.6744714743117, -83.21646206080914,
                 0, Color.YELLOW, 17, icon);
@@ -111,6 +115,11 @@ public class LocalDataSource extends DataSource {
         Marker PSSB = new IconMarker("Police and Support Services Building", 42.67131791211299,
                 -83.21899976581335, 0, Color.YELLOW, 289, icon);
         cachedMarkers.add(PSSB);
+
+        // Dorms/Apartments (Mainly)
+        Marker VDH = new IconMarker("Vandenberg Hall", 42.67688195694066, -83.21583610028028, 0,
+                Color.YELLOW, 5, icon);
+        cachedMarkers.add(VDH);
 
         Marker OVH = new IconMarker("Oak View Hall", 42.67804932754033, -83.21572311222553, 0,
                 Color.YELLOW, 3125, icon);
@@ -152,9 +161,15 @@ public class LocalDataSource extends DataSource {
                 Color.YELLOW, 390625, icon);
         cachedMarkers.add(PrH);
 
+        // Library
         Marker KL = new IconMarker("Kresge Library", 42.672655477850896, -83.21593601256609, 0,
                 Color.YELLOW, 19, icon);
         cachedMarkers.add(KL);
+
+        // Sports/Recreational Facilities
+        Marker REC = new IconMarker("Rec Center", 42.673605265162614, -83.2130965590477, 0,
+                Color.YELLOW, 17, icon);
+        cachedMarkers.add(REC);
 
         Marker ACO = new IconMarker("Athletics Center O’Rena", 42.674084467162885,
                 -83.21367457509041, 0, Color.YELLOW, 11, icon);
@@ -172,6 +187,15 @@ public class LocalDataSource extends DataSource {
                 -83.21135580539703, 0, Color.YELLOW, 14641, icon);
         cachedMarkers.add(OBF);
 
+        Marker GODGC = new IconMarker("Grizzly Oaks Disc Golf Course", 42.67780752390234,
+                -83.20705153048038, 0, Color.YELLOW, 161051, icon);
+        cachedMarkers.add(GODGC);
+
+        Marker GCC3PS = new IconMarker("Golf Course Clubhouse and Pro Shop", 42.67258546959509,
+                -83.19449376314878, 0, Color.YELLOW, 1771561, icon);
+        cachedMarkers.add(GCC3PS);
+
+        // Entertainment
         Marker MBT = new IconMarker("Meadow Brook Theater", 42.67601849282903, -83.2179731503129,
                 0, Color.YELLOW, 23, icon);
         cachedMarkers.add(MBT);
@@ -184,30 +208,7 @@ public class LocalDataSource extends DataSource {
                 -83.20305772125721, 0, Color.YELLOW, 124627, icon);
         cachedMarkers.add(MBMF);
 
-        Marker ST = new IconMarker("Sunset Terrace", 42.67598768101327, -83.198696449399, 0,
-                Color.YELLOW, 9, icon);
-        cachedMarkers.add(ST);
-
-        Marker SGP = new IconMarker("Shotwell-Gustafson Pavilion", 42.6736952390709456,
-                -83.19764737039804, 0, Color.YELLOW, 2401, icon);
-        cachedMarkers.add(SGP);
-
-        Marker CH = new IconMarker("Carriage House", 42.67271661175625, -83.20039495825768, 0,
-                Color.YELLOW, 81, icon);
-        cachedMarkers.add(CH);
-
-        Marker GCC3PS = new IconMarker("Golf Course Clubhouse and Pro Shop", 42.67258546959509,
-                -83.19449376314878, 0, Color.YELLOW, 279841, icon);
-        cachedMarkers.add(GCC3PS);
-
-        Marker MBG = new IconMarker("Meadow Brook Greenhouse", 42.673366155786844,
-                -83.1945001333952, 0, Color.YELLOW, 16807, icon);
-        cachedMarkers.add(MBG);
-
-        Marker GODGC = new IconMarker("Grizzly Oaks Disc Golf Course", 42.67780752390234,
-                -83.20705153048038, 0, Color.YELLOW, 161051, icon);
-        cachedMarkers.add(GODGC);
-
+        // Utilities Facilities
         Marker CHP = new IconMarker("Central Heating Plant", 42.67504138108844, -83.21283269673586,
                 0, Color.YELLOW, 13, icon);
         cachedMarkers.add(CHP);
@@ -227,6 +228,15 @@ public class LocalDataSource extends DataSource {
         Marker FM = new IconMarker("Facilities Management", 42.67035034062799, -83.21831613779068,
                 0, Color.YELLOW, 371293, icon);
         cachedMarkers.add(FM);
+
+        // Sightseeing
+        Marker ST = new IconMarker("Sunset Terrace", 42.67598768101327, -83.198696449399, 0,
+                Color.YELLOW, 9, icon);
+        cachedMarkers.add(ST);
+
+        Marker CH = new IconMarker("Carriage House", 42.67271661175625, -83.20039495825768, 0,
+                Color.YELLOW, 81, icon);
+        cachedMarkers.add(CH);
 
         Marker BL = new IconMarker("Bear Lake", 42.67629998887037, -83.21636818349361, 0,
                 Color.YELLOW, 3, icon);
