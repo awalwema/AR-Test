@@ -1,38 +1,42 @@
 package com.example.andrew.ar_test.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.andrew.ar_test.data.ARData;
-import com.example.andrew.ar_test.data.DatabaseHandler;
-import com.example.andrew.ar_test.data.GooglePlacesDataSource;
 import com.example.andrew.ar_test.data.LocalDataSource;
-import com.example.andrew.ar_test.data.NetworkDataSource;
-import com.example.andrew.ar_test.data.Place;
 import com.example.andrew.ar_test.ui.Marker;
 import com.example.andrew.ar_test.widget.VerticalTextView;
 import com.jwetherell.augmented_reality.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -42,28 +46,47 @@ import java.util.concurrent.TimeUnit;
  * 
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
-public class Demo extends AugmentedReality {
+public class Demo extends AugmentedReality implements AdapterView.OnItemClickListener {
 	
     private static final String TAG = "Demo";
     private static final String locale = Locale.getDefault().getLanguage();
     private static final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(1);
     private static final ThreadPoolExecutor exeService =
             new ThreadPoolExecutor(1, 1, 20, TimeUnit.SECONDS, queue);
-    private static final Map<String, NetworkDataSource> sources =
-            new ConcurrentHashMap<String, NetworkDataSource>();
 
     private static Toast myToast = null;
     private static VerticalTextView text = null;
 
-    /*vote to be removed
-    private static String key = null;
-    private static Bitmap icon = null;
-    private static final String URL = "https://maps.googleapis.com/maps/api/place/details/json?";
-    public static String place_id;
-    */
+    private DrawerLayout drawerLayout;
+    private ListView listView;
 
-    DatabaseHandler db = new DatabaseHandler(this);
+    private LocalDataSource localData;
+
+    @SuppressWarnings("deprecation")
+    private android.support.v4.app.ActionBarDrawerToggle drawerListener;
+    private MyAdapter myAdapter;
+
     public static String info;
+
+    private int radartype = 1; // For all locations
+    private String markerName = "";
+
+    /*Search listview variables */
+    // List view
+    private ListView lv;
+
+
+    // Listview Adapter
+    ArrayAdapter<String> adapter;
+
+    // Search EditText
+    EditText inputSearch;
+
+
+    // ArrayList for Listview
+    ArrayList<HashMap<String, String>> productList;
+
+    /*End Search listview variables */
     /**
      * {@inheritDoc}
      */
@@ -87,20 +110,153 @@ public class Demo extends AugmentedReality {
         myToast.setDuration(Toast.LENGTH_SHORT);
 
         // Local
-        LocalDataSource localData = new LocalDataSource(this.getResources());
-        ARData.addMarkers(localData.getMarkers());
+        localData = new LocalDataSource(this.getResources());
+        ARData.addMarkers(localData.filterType(radartype));
 
-        NetworkDataSource googlePlaces = new GooglePlacesDataSource(this.getResources());
-        sources.put("googlePlaces", googlePlaces);
+        drawerLayout=(DrawerLayout) findViewById(R.id.drawerLayout);
 
-        Context context = getApplicationContext();
-        CharSequence text = "Swipe from left to filter!";
-        int duration = Toast.LENGTH_SHORT;
+        listView =(ListView) findViewById(R.id.drawerList);
+        myAdapter = new MyAdapter(this);
+        listView.setAdapter(myAdapter);
 
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
+        listView.setOnItemClickListener(this);
+
+        drawerListener = new android.support.v4.app.ActionBarDrawerToggle(this, drawerLayout, R.mipmap.ic_action_drawer_icon, R.string.drawer_open, R.string.drawer_close){
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                showRadar = !showRadar;
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                showRadar = !showRadar;
+            }
+        };
+        drawerLayout.setDrawerListener(drawerListener);
+
 
     }
+
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+        selectItem(position);
+
+        switch (position){
+            case 0:
+                final CharSequence places[] = new CharSequence[] {"Anibal House", "Ann V. Nicholson Student Apartments","Athletics Center O'Rena",
+                        "Bear Lake",
+                        "Belgian Barn",
+                        "Buildings and Grounds Maintenance",
+                        "Carriage House",
+                        "Central Heating Plant",
+                        "Danny's Cabin",
+                        "Dodge Hall",
+                        "Electrical Substation",
+                        "Elliot Tower",
+                        "Elliott Hall",
+                        "Engineering Center",
+                        "Facilities Management",
+                        "Fitzgerald House",
+                        "George T. Matthews Apartments",
+                        "Golf Course Clubhouse and Pro Shop",
+                        "Graham Health Center",
+                        "Grizzly Oaks Disc Golf Course",
+                        "Hamlin Hall",
+                        "Hannah Hall",
+                        "Hill House",
+                        "Human Health Building",
+                        "John Dodge House",
+                        "Kettering Magnetics Lab",
+                        "Kresge Library",
+                        "Mathematics and Science Center",
+                        "Meadow Brook Greenhouse",
+                        "Meadow Brook Hall & Gardens",
+                        "Meadow Brook Music Festival",
+                        "Meadow Brook Theatre",
+                        "North Foundation Hall",
+                        "O'Dowd Hall",
+                        "Oak View Hall",
+                        "Oakland Baseball Field",
+                        "Oakland Center",
+                        "Observatory",
+                        "Pawley Hall",
+                        "Pioneer Field (Lower)",
+                        "Police and Support Services Building",
+                        "Pryale House",
+                        "Shotwell-Gustafson Pavilion",
+                        "South Foundation Hall",
+                        "Storage Facility",
+                        "Sunset Terrace",
+                        "Rec Center",
+                        "Recreation and Athletic Complex",
+                        "Van Wagoner House",
+                        "Vandenberg Hall",
+                        "Varner Hall",
+                }
+                        ;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Pick a location");
+                builder.setItems(places, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // the user clicked on colors[which]
+                        markerName = (String) places[which];
+                        showOneMarker(markerName);
+
+                    }
+                });
+                builder.show();
+                break;
+            case 1:
+                radartype = 19;
+                break;
+            case 2:
+                radartype = 13;
+                break;
+            case 3:
+                radartype = 11;
+                break;
+            case 4:
+                radartype = 3;
+                break;
+            case 5:
+                radartype = 17;
+                break;
+            case 6:
+                radartype = 2;
+                break;
+            case 7:
+                radartype = 7;
+                break;
+            case 8:
+                radartype = 5;
+                break;
+            case 9:
+                radartype = 23;
+                break;
+            case 10:
+                radartype = 1;
+                break;
+            default:
+                Log.e("Filter out of range: ", "check invoking method.");
+        }
+
+        ARData.addMarkers(localData.filterType(radartype));
+        drawerLayout.closeDrawer(listView);
+    }
+
+    private void selectItem(int position)
+    {
+        listView.setItemChecked(position, true);
+
+    }
+
+    public void setTitle(String title) //Shows selected title in action bar.
+    {
+        //getSupportActionBar().setTitle(title);
+    }
+
+
 
     /**
      * {@inheritDoc}
@@ -163,6 +319,15 @@ public class Demo extends AugmentedReality {
     protected void markerTouched(Marker marker) {
         text.setText(marker.getName());
         myToast.show();
+        showOneMarker(marker.getName());
+
+
+    }
+
+    protected void showOneMarker(String name) {
+        markerName = name;
+        ARData.addMarkers(localData.filterByName(markerName));
+        radartype=100;
     }
 
     /**
@@ -175,124 +340,68 @@ public class Demo extends AugmentedReality {
         updateData();
     }
 
-    private void initialUpdateData(final double lat, final double lon, final double alt) {
-        if(db.getPlacesCount()==0) {
-
-            try {
-                exeService.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        for (NetworkDataSource source : sources.values())
-                            saveToDB(source, lat, lon, alt);
-                    }
-                });
-            } catch (RejectedExecutionException rej) {
-                Log.w(TAG, "Not running new download Runnable, queue is full.");
-            } catch (Exception e) {
-                Log.e(TAG, "Exception running download Runnable.", e);
-            }
-        }
-        else {
-            Toast.makeText(this, "Lock and load bithc", Toast.LENGTH_LONG);
-        }
-    }
-
-    private void updateDataOriginal() {
-        try {
-            exeService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    for (NetworkDataSource source : sources.values())
-                        download(source);
-                }
-            });
-        } catch (RejectedExecutionException rej) {
-            Log.w(TAG, "Not running new download Runnable, queue is full.");
-        } catch (Exception e) {
-            Log.e(TAG, "Exception running download Runnable.", e);
-        }
-    }
-
     private void updateData() {
         LocalDataSource localData = new LocalDataSource(this.getResources());
-        ARData.addMarkers(localData.getMarkers());
-    }
 
-    private boolean download(NetworkDataSource source) {
-        if (source == null) return false;
-
-       /* String url = null;
-        try {
-            url = source.createRequestURL(lat, lon, alt, ARData.getRadius(), locale);
-        } catch (NullPointerException e) {
-            return false;
-        }*/
-
-        List<Marker> markers = null;
-        ArrayList<Place> placeList;
-        try {
-            placeList = (ArrayList)db.getAllPlaces();
-
-            for(int i= 0 ; i<placeList.size(); i++){
-                markers = source.parse(placeList.get(i));
-                ARData.addMarkers(markers);
-            }
-        } catch (NullPointerException e) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean saveToDB(NetworkDataSource source, double lat, double lon, double alt) {
-        if (source == null) return false;
-
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put("Human Health Building", "ChIJUcxP8pHqJIgRZ1BhRCCmw4k");
-        map.put("Kresge Library", "ChIJ1RzjhWLqJIgRfGY78wBl-Mk");
-        map.put("North Foundation Hall", "ChIJQ2tJ24_qJIgR3bajTTz9ktY");
-        map.put("Graham Health Center", "ChIJUdsCGY7qJIgR3fN0KGMZGCM");
-        map.put("Meadow Brook Theatre", "ChIJ--0PMo7qJIgRnu4MUriTErQ");
-        map.put("Oakland Center", "ChIJhfKkvo_qJIgRUO1NGq8EzpQ");
-        map.put("South Foundation Hall", "ChIJ28H074_qJIgRKa9H-XBjNQw");
-        map.put("O'Dowd Hall", "ChIJbx5qCY_qJIgRkUYydXg_y_c");
-        map.put("Engineering Center", "ChIJR2vhkIXqJIgRKuKNq_8yXWs");
-        map.put("Hannah Hall", "ChIJ0_zqN4XqJIgRDrkUi23ayZI");
-        map.put("Dodge Hall", "ChIJWVE1E4XqJIgRQc9LBgl_NP8");
-        map.put("Police and Support Services Building", "ChIJsdc6xZrqJIgReA9MsWXcc6s");
-        map.put("Belgian Barn", "ChIJsZTY2ZrqJIgREOWfM0AYpgg");
-        map.put("Elliott Hall", "ChIJGXbs5oXqJIgRE-Zjms68Ogw");
-        map.put("Pawley Hall", "ChIJ4ynfSYbqJIgRUcbCnbHy3B8");
-        map.put("Athletics Center O'Rena", "ChIJwa1XNY_qJIgRWYmP0fx7gpA");
-        map.put("Central Heating Plant", "ChIJuWCS1YjqJIgR0RImzb4LgUI");
-        map.put("Varner Hall", "ChIJy9WBDIbqJIgRxfOuhiVLAxA");
-
-        Iterator it = map.entrySet().iterator();
-        List<Marker> markers = null;
-
-        while (it.hasNext())
+        if (radartype == 100)
         {
-            Map.Entry pair = (Map.Entry) it.next();
-            //place_id = pair.getValue().toString();
-
-
-            String url = null;
-            try {
-                url = source.createRequestURL2(pair.getValue().toString(), locale);
-            } catch (NullPointerException e) {
-                return false;
-            }
-
-            try {
-                markers = source.parse(url);
-            } catch (NullPointerException e) {
-                return false;
-            }
-
-            //ARData.addMarkers(markers);
-            db.addPlace(new Place(source.getInfo()));
-            it.remove();
+            ARData.addMarkers(localData.filterByName(markerName));
         }
-        return true;
+
+        else {
+            ARData.addMarkers(localData.filterType(radartype));
+        }
     }
+}
+
+class MyAdapter extends BaseAdapter
+{
+    private Context context;
+    String[] categorySites;
+    int[] images = {R.mipmap.ic_search,R.mipmap.ic_library, R.mipmap.ic_utilities,R.mipmap.ic_sports, R.mipmap.ic_sight_seeing,
+            R.mipmap.ic_admin, R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses,R.mipmap.ic_entertainment,R.mipmap.ic_action_campus};
+
+    public MyAdapter(Context context)
+    {
+        this.context=context;
+        categorySites=context.getResources().getStringArray(R.array.categories);
+    }
+    @Override
+    public int getCount()
+    {
+        return categorySites.length;
+    }
+
+    @Override
+    public Object getItem(int position)
+    {
+        return categorySites[position];
+    }
+
+    @Override
+    public long getItemId(int position)
+    {
+        return position;
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent){
+
+        View row = null;
+        if (convertView == null)
+        {
+            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            row = inflater.inflate(R.layout.custom_row, parent, false);
+        }
+        else
+        {
+            row=convertView;
+        }
+        TextView titleTextView = (TextView) row.findViewById(R.id.textView1);
+        ImageView titleImageView = (ImageView) row.findViewById(R.id.imageView1);
+        titleTextView.setText(categorySites[position]);
+        titleImageView.setImageResource(images[position]);
+
+        return row;
+    }
+
 }

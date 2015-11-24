@@ -21,7 +21,6 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -142,13 +141,6 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
 
             //locationMgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             //locationMgr.requestLocationUpdates(mGoogleApiClient, mCurrentLocation, mLocationRequest );
-
-
-
-            FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
-
-
-
 
 
             try {
@@ -396,7 +388,7 @@ public class SensorsActivity extends Activity implements SensorEventListener, Lo
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
         ARData.setCurrentLocation(mCurrentLocation);
-        gmf = new GeomagneticField((float) ARData.getCurrentLocation().getLatitude(), 
+        gmf = new GeomagneticField((float) ARData.getCurrentLocation().getLatitude(),
                                    (float) ARData.getCurrentLocation().getLongitude(), 
                                    (float) ARData.getCurrentLocation().getAltitude(), System.currentTimeMillis());
 

@@ -14,13 +14,13 @@ import com.example.andrew.ar_test.ui.objects.PaintableIcon;
 public class IconMarker extends Marker {
 
     private Bitmap bitmap = null;
-    private int type;
 
-    public IconMarker(String name, double latitude, double longitude, double altitude, int color,  Bitmap bitmap, int type) {
-        super(name, latitude, longitude, altitude, color);
+    public IconMarker(String name, double latitude, double longitude, double altitude, int color,
+                      int type, Bitmap bitmap) {
+        super(name, latitude, longitude, altitude, color, type);
         this.bitmap = bitmap;
-        this.type = type;
     }
+
 
     /**
      * {@inheritDoc}

@@ -209,6 +209,9 @@ public abstract class ARData {
 
         if (markers.size() <= 0) return;
 
+        if(markerList!=null)
+            markerList.clear();
+
         Log.d(TAG, "New markers, updating markers. new markers=" + markers.toString());
         for (Marker marker : markers) {
             if (!markerList.containsKey(marker.getName())) {

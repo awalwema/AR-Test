@@ -1,7 +1,5 @@
 package com.example.andrew.ar_test.ui;
 
-import java.text.DecimalFormat;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -19,6 +17,8 @@ import com.example.andrew.ar_test.ui.objects.PaintableGps;
 import com.example.andrew.ar_test.ui.objects.PaintableObject;
 import com.example.andrew.ar_test.ui.objects.PaintablePoint;
 import com.example.andrew.ar_test.ui.objects.PaintablePosition;
+
+import java.text.DecimalFormat;
 
 /**
  * This class will represent a physical location and will calculate it's
@@ -72,6 +72,8 @@ public class Marker implements Comparable<Marker> {
     private final Vector locationXyzRelativeToPhysicalLocation = new Vector();
     // Marker's default color
     private int color = Color.WHITE;
+    // Marker's type for filtering
+    private int type = 0;
     // For tracking Markers which have no altitude
     private boolean noAltitude = false;
 
@@ -80,8 +82,8 @@ public class Marker implements Comparable<Marker> {
     private PaintablePoint positionPoint = null;
     private PaintablePosition positionContainer = null;
 
-    public Marker(String name, double latitude, double longitude, double altitude, int color) {
-        set(name, latitude, longitude, altitude, color);
+    public Marker(String name, double latitude, double longitude, double altitude, int color, int type) {
+        set(name, latitude, longitude, altitude, color, type);
     }
 
     /**
@@ -99,13 +101,14 @@ public class Marker implements Comparable<Marker> {
      * @param color
      *            Color of the Marker.
      */
-    public void set(String name, double latitude, double longitude, double altitude, int color) {
+    public void set(String name, double latitude, double longitude, double altitude, int color, int type) {
         if (name == null)
             throw new NullPointerException();
 
         this.name = name;
         this.physicalLocation.set(latitude, longitude, altitude);
         this.color = color;
+        this.type = type;
         this.isOnRadar = false;
         this.isInView = false;
         this.locationXyzRelativeToPhysicalLocation.set(0, 0, 0);
@@ -133,6 +136,13 @@ public class Marker implements Comparable<Marker> {
     public int getColor() {
         return this.color;
     }
+
+    /**
+     * Get the type of this Marker.
+     *
+     * @return int representing the type of this Marker.
+     */
+    public int getType(){ return this.type; }
 
     /**
      * Get the distance of this Marker from the current GPS position.

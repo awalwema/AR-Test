@@ -22,7 +22,7 @@ import com.example.andrew.ar_test.ui.objects.PaintableText;
  */
 public class Radar {
 
-    public static final float RADIUS = 200;
+    public static final float RADIUS = 175;
 
     private static final int LINE_COLOR = Color.argb(255, 255, 255, 255);
     private static final float PAD_X = 10;
