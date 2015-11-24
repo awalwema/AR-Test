@@ -1,15 +1,25 @@
 package com.example.andrew.ar_test.activity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.andrew.ar_test.data.ARData;
@@ -41,7 +51,7 @@ import java.util.concurrent.TimeUnit;
  * 
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
-public class Demo extends AugmentedReality {
+public class Demo extends AugmentedReality implements AdapterView.OnItemClickListener {
 	
     private static final String TAG = "Demo";
     private static final String locale = Locale.getDefault().getLanguage();
@@ -54,12 +64,14 @@ public class Demo extends AugmentedReality {
     private static Toast myToast = null;
     private static VerticalTextView text = null;
 
-    /*vote to be removed
-    private static String key = null;
-    private static Bitmap icon = null;
-    private static final String URL = "https://maps.googleapis.com/maps/api/place/details/json?";
-    public static String place_id;
-    */
+    private DrawerLayout drawerLayout;
+    private ListView listView;
+
+    @SuppressWarnings("deprecation")
+    private android.support.v4.app.ActionBarDrawerToggle drawerListener;
+    private MyAdapter myAdapter;
+
+
 
     DatabaseHandler db = new DatabaseHandler(this);
     public static String info;
@@ -91,7 +103,50 @@ public class Demo extends AugmentedReality {
 
         NetworkDataSource googlePlaces = new GooglePlacesDataSource(this.getResources());
         sources.put("googlePlaces", googlePlaces);
+
+        drawerLayout=(DrawerLayout) findViewById(R.id.drawerLayout);
+
+
+        listView =(ListView) findViewById(R.id.drawerList);
+        myAdapter = new MyAdapter(this);
+        listView.setAdapter(myAdapter);
+
+        listView.setOnItemClickListener(this);
+        drawerListener = new android.support.v4.app.ActionBarDrawerToggle(this, drawerLayout, R.mipmap.ic_action_drawer_icon, R.string.drawer_open, R.string.drawer_close){
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                Toast.makeText(Demo.this, " Drawer Opened",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                Toast.makeText(Demo.this, " Drawer Closed",
+                Toast.LENGTH_SHORT).show();
+            }
+        };
+        drawerLayout.setDrawerListener(drawerListener);
+
+
     }
+
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+
+        selectItem(position);
+    }
+
+    private void selectItem(int position)
+    {
+        listView.setItemChecked(position, true);
+
+    }
+
+    public void setTitle(String title) //Shows selected title in action bar.
+    {
+        //getSupportActionBar().setTitle(title);
+    }
+
+
 
     /**
      * {@inheritDoc}
@@ -286,4 +341,56 @@ public class Demo extends AugmentedReality {
         }
         return true;
     }
+}
+
+class MyAdapter extends BaseAdapter
+{
+    private Context context;
+    String[] categorySites;
+    int[] images = {R.mipmap.ic_search,R.mipmap.ic_library, R.mipmap.ic_utilities,R.mipmap.ic_sports, R.mipmap.ic_sight_seeing,
+            R.mipmap.ic_admin, R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses,R.mipmap.ic_entertainment};
+
+    public MyAdapter(Context context)
+    {
+        this.context=context;
+        categorySites=context.getResources().getStringArray(R.array.categories);
+    }
+    @Override
+    public int getCount()
+    {
+        return categorySites.length;
+    }
+
+    @Override
+    public Object getItem(int position)
+    {
+        return categorySites[position];
+    }
+
+    @Override
+    public long getItemId(int position)
+    {
+        return position;
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent){
+
+        View row = null;
+        if (convertView == null)
+        {
+            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            row = inflater.inflate(R.layout.custom_row, parent, false);
+        }
+        else
+        {
+            row=convertView;
+        }
+        TextView titleTextView = (TextView) row.findViewById(R.id.textView1);
+        ImageView titleImageView = (ImageView) row.findViewById(R.id.imageView1);
+        titleTextView.setText(categorySites[position]);
+        titleImageView.setImageResource(images[position]);
+
+        return row;
+    }
+
 }
