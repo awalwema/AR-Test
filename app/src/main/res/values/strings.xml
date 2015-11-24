@@ -7,7 +7,7 @@
     <string name="drawer_close">Close Navigation Drawer</string>
 
     <string-array name="categories">
-        <item>Find a building</item>
+        <item>Show all buildings</item>
         <item>Library</item>
         <item>Utilities Facilities</item>
         <item>Sport/Recreational Facilities</item>

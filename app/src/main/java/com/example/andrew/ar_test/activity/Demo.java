@@ -67,6 +67,7 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     public static String info;
 
     private int radartype = 1; // For all locations
+    private String markerName = "";
 
     /*Search listview variables */
     // List view
@@ -250,6 +251,15 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     protected void markerTouched(Marker marker) {
         text.setText(marker.getName());
         myToast.show();
+        showOneMarker(marker.getName());
+
+
+    }
+
+    protected void showOneMarker(String name) {
+        markerName = name;
+        ARData.addMarkers(localData.filterByName(markerName));
+        radartype=100;
     }
 
     /**
@@ -264,7 +274,15 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
 
     private void updateData() {
         LocalDataSource localData = new LocalDataSource(this.getResources());
-        ARData.addMarkers(localData.filterType(radartype));
+
+        if (radartype == 100)
+        {
+            ARData.addMarkers(localData.filterByName(markerName));
+        }
+
+        else {
+            ARData.addMarkers(localData.filterType(radartype));
+        }
     }
 }
 

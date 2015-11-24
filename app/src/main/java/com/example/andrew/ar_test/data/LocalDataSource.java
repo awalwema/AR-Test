@@ -285,6 +285,20 @@ public class LocalDataSource extends DataSource {
         return temp;
     }
 
+    public List<Marker> filterByName(String name){
+
+        List<Marker> temp2 = new ArrayList<Marker>();
+
+
+        for(int i=0; i<cachedMarkers.size(); i++)
+        {
+            if(cachedMarkers.get(i).getName().equalsIgnoreCase(name))
+                temp2.add(cachedMarkers.get(i));
+        }
+
+        return temp2;
+    }
+
     public JSONObject getInfo()
     {
         return null;
