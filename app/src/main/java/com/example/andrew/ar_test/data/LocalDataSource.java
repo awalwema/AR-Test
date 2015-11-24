@@ -55,7 +55,7 @@ public class LocalDataSource extends DataSource {
                 0, Color.YELLOW, 14, icon);
         cachedMarkers.add(HHB);
 
-        Marker OH = new IconMarker("O’Dowd Hall", 42.6743275177939, -83.2153657078743, 0,
+        Marker OH = new IconMarker("O'Dowd Hall", 42.6743275177939, -83.2153657078743, 0,
                 Color.YELLOW, 28, icon);
         cachedMarkers.add(OH);
 
