@@ -18,7 +18,7 @@
         android:layout_height="fill_parent"/>
 
     <ListView
-        android:background="#FFD700"
+        android:background="#CCAC00"
         android:divider="@null"
         android:id="@+id/drawerList"
         android:layout_width="240dp"

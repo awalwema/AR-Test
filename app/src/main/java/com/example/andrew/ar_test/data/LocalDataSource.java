@@ -109,7 +109,7 @@ public class LocalDataSource extends DataSource {
                 0, Color.YELLOW, 34, icon);
         cachedMarkers.add(NFH);
 
-        Marker GHC = new IconMarker("Graham Health Center", 42.6744714743117, -83.21646206080914,
+        Marker GHC = new IconMarker("Graham Health Center", 42.67675254900997, -83.21801975369453,
                 0, Color.YELLOW, 17, icon);
         cachedMarkers.add(GHC);
 

@@ -72,9 +72,6 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     // List view
     private ListView lv;
 
-    private final String PRODUCTS[] = {"Dell Inspiron", "HTC One X", "HTC Wildfire S", "HTC Sense", "HTC Sensation XE",
-            "iPhone 4S", "Samsung Galaxy Note 800",
-            "Samsung Galaxy S3", "MacBook Air", "Mac Mini", "MacBook Pro"};
 
     // Listview Adapter
     ArrayAdapter<String> adapter;
@@ -121,14 +118,6 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
 
         listView.setOnItemClickListener(this);
 
-
-
-        lv = (ListView) findViewById(R.id.list_view);
-        inputSearch = (EditText) findViewById(R.id.inputSearch);
-
-        // Adding items to listview
-        //adapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.product_name, products);
-        lv.setAdapter(adapter);
         drawerListener = new android.support.v4.app.ActionBarDrawerToggle(this, drawerLayout, R.mipmap.ic_action_drawer_icon, R.string.drawer_open, R.string.drawer_close){
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -184,6 +173,7 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
         }
 
         ARData.addMarkers(localData.filterType(radartype));
+        drawerLayout.closeDrawer(listView);
     }
 
     private void selectItem(int position)
