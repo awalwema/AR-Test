@@ -7,7 +7,7 @@
     <string name="drawer_close">Close Navigation Drawer</string>
 
     <string-array name="categories">
-        <item>Show all buildings</item>
+        <item>Find a building</item>
         <item>Library</item>
         <item>Utilities Facilities</item>
         <item>Sport/Recreational Facilities</item>
@@ -17,6 +17,7 @@
         <item>Laboratories</item>
         <item>Dormitories/Apartments</item>
         <item>Entertainment</item>
+        <item>Show all locations</item>
     </string-array>
 
 

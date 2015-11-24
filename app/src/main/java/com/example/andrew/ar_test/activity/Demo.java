@@ -1,6 +1,8 @@
 package com.example.andrew.ar_test.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
@@ -140,7 +142,70 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
 
         switch (position){
             case 0:
-                radartype = 1;
+                final CharSequence places[] = new CharSequence[] {"Anibal House", "Ann V. Nicholson Student Apartments","Athletics Center O'Rena",
+                        "Bear Lake",
+                        "Belgian Barn",
+                        "Buildings and Grounds Maintenance",
+                        "Carriage House",
+                        "Central Heating Plant",
+                        "Danny's Cabin",
+                        "Dodge Hall",
+                        "Electrical Substation",
+                        "Elliot Tower",
+                        "Elliott Hall",
+                        "Engineering Center",
+                        "Facilities Management",
+                        "Fitzgerald House",
+                        "George T. Matthews Apartments",
+                        "Golf Course Clubhouse and Pro Shop",
+                        "Graham Health Center",
+                        "Grizzly Oaks Disc Golf Course",
+                        "Hamlin Hall",
+                        "Hannah Hall",
+                        "Hill House",
+                        "Human Health Building",
+                        "John Dodge House",
+                        "Kettering Magnetics Lab",
+                        "Kresge Library",
+                        "Mathematics and Science Center",
+                        "Meadow Brook Greenhouse",
+                        "Meadow Brook Hall & Gardens",
+                        "Meadow Brook Music Festival",
+                        "Meadow Brook Theatre",
+                        "North Foundation Hall",
+                        "O'Dowd Hall",
+                        "Oak View Hall",
+                        "Oakland Baseball Field",
+                        "Oakland Center",
+                        "Observatory",
+                        "Pawley Hall",
+                        "Pioneer Field (Lower)",
+                        "Police and Support Services Building",
+                        "Pryale House",
+                        "Shotwell-Gustafson Pavilion",
+                        "South Foundation Hall",
+                        "Storage Facility",
+                        "Sunset Terrace",
+                        "Rec Center",
+                        "Recreation and Athletic Complex",
+                        "Van Wagoner House",
+                        "Vandenberg Hall",
+                        "Varner Hall",
+                }
+                        ;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Pick a location");
+                builder.setItems(places, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // the user clicked on colors[which]
+                        markerName = (String) places[which];
+                        showOneMarker(markerName);
+
+                    }
+                });
+                builder.show();
                 break;
             case 1:
                 radartype = 19;
@@ -168,6 +233,9 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
                 break;
             case 9:
                 radartype = 23;
+                break;
+            case 10:
+                radartype = 1;
                 break;
             default:
                 Log.e("Filter out of range: ", "check invoking method.");
@@ -291,7 +359,7 @@ class MyAdapter extends BaseAdapter
     private Context context;
     String[] categorySites;
     int[] images = {R.mipmap.ic_search,R.mipmap.ic_library, R.mipmap.ic_utilities,R.mipmap.ic_sports, R.mipmap.ic_sight_seeing,
-            R.mipmap.ic_admin, R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses,R.mipmap.ic_entertainment};
+            R.mipmap.ic_admin, R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses,R.mipmap.ic_entertainment,R.mipmap.ic_action_campus};
 
     public MyAdapter(Context context)
     {
