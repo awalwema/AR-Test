@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.example.andrew.ar_test.ui.IconMarker;
 import com.example.andrew.ar_test.ui.Marker;
@@ -261,7 +262,7 @@ public class LocalDataSource extends DataSource {
 
     public List<Marker> getMarkers() {
         if(cachedMarkers==null)
-            throw new NullPointerException("Markers loaded incorrectly.");
+            Log.e("cachedMakers == null: ", "Markers not loaded correctly.");
 
         return cachedMarkers;
     }
