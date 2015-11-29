@@ -17,9 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -32,8 +30,6 @@ import com.example.andrew.ar_test.ui.Marker;
 import com.example.andrew.ar_test.widget.VerticalTextView;
 import com.jwetherell.augmented_reality.R;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -68,25 +64,14 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
 
     public static String info;
 
-    private int radartype = 1; // For all locations
+    private int radarType = 1; // For all locations
     private String markerName = "";
 
-    /*Search listview variables */
-    // List view
-    private ListView lv;
+
+    long startTime = System.currentTimeMillis();
+    long currentTime;
 
 
-    // Listview Adapter
-    ArrayAdapter<String> adapter;
-
-    // Search EditText
-    EditText inputSearch;
-
-
-    // ArrayList for Listview
-    ArrayList<HashMap<String, String>> productList;
-
-    /*End Search listview variables */
     /**
      * {@inheritDoc}
      */
@@ -111,7 +96,7 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
 
         // Local
         localData = new LocalDataSource(this.getResources());
-        ARData.addMarkers(localData.filterType(radartype));
+        ARData.addMarkers(localData.filterType(radarType));
 
         drawerLayout=(DrawerLayout) findViewById(R.id.drawerLayout);
 
@@ -124,7 +109,7 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
         drawerListener = new android.support.v4.app.ActionBarDrawerToggle(this, drawerLayout, R.mipmap.ic_action_drawer_icon, R.string.drawer_open, R.string.drawer_close){
             @Override
             public void onDrawerOpened(View drawerView) {
-                showRadar = !showRadar;
+                showRadar = false;
             }
 
             @Override
@@ -133,6 +118,8 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
             }
         };
         drawerLayout.setDrawerListener(drawerListener);
+
+        System.currentTimeMillis();
 
 
     }
@@ -208,40 +195,40 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
                 builder.show();
                 break;
             case 1:
-                radartype = 19;
+                radarType = 19;
                 break;
             case 2:
-                radartype = 13;
+                radarType = 13;
                 break;
             case 3:
-                radartype = 11;
+                radarType = 11;
                 break;
             case 4:
-                radartype = 3;
+                radarType = 3;
                 break;
             case 5:
-                radartype = 17;
+                radarType = 17;
                 break;
             case 6:
-                radartype = 2;
+                radarType = 2;
                 break;
             case 7:
-                radartype = 7;
+                radarType = 7;
                 break;
             case 8:
-                radartype = 5;
+                radarType = 5;
                 break;
             case 9:
-                radartype = 23;
+                radarType = 23;
                 break;
             case 10:
-                radartype = 1;
+                radarType = 1;
                 break;
             default:
                 Log.e("Filter out of range: ", "check invoking method.");
         }
 
-        ARData.addMarkers(localData.filterType(radartype));
+        ARData.addMarkers(localData.filterType(radarType));
         drawerLayout.closeDrawer(listView);
     }
 
@@ -309,7 +296,11 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
 
-        updateData();
+        currentTime = System.currentTimeMillis();
+
+        if ((currentTime - startTime) % 3 == 0 ) {
+            updateData();
+        }
     }
 
     /**
@@ -327,7 +318,7 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     protected void showOneMarker(String name) {
         markerName = name;
         ARData.addMarkers(localData.filterByName(markerName));
-        radartype=100;
+        radarType =100;
     }
 
     /**
@@ -343,13 +334,13 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     private void updateData() {
         LocalDataSource localData = new LocalDataSource(this.getResources());
 
-        if (radartype == 100)
+        if (radarType == 100)
         {
             ARData.addMarkers(localData.filterByName(markerName));
         }
 
         else {
-            ARData.addMarkers(localData.filterType(radartype));
+            ARData.addMarkers(localData.filterType(radarType));
         }
     }
 }
@@ -359,7 +350,7 @@ class MyAdapter extends BaseAdapter
     private Context context;
     String[] categorySites;
     int[] images = {R.mipmap.ic_search,R.mipmap.ic_library, R.mipmap.ic_utilities,R.mipmap.ic_sports, R.mipmap.ic_sight_seeing,
-            R.mipmap.ic_admin, R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses,R.mipmap.ic_entertainment,R.mipmap.ic_action_campus};
+            R.mipmap.ic_launcher, R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses,R.mipmap.ic_entertainment,R.mipmap.ic_action_campus};
 
     public MyAdapter(Context context)
     {
