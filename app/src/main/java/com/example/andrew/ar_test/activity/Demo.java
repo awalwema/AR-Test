@@ -359,7 +359,7 @@ class MyAdapter extends BaseAdapter
     private Context context;
     String[] categorySites;
     int[] images = {R.mipmap.ic_search,R.mipmap.ic_library, R.mipmap.ic_utilities,R.mipmap.ic_sports, R.mipmap.ic_sight_seeing,
-            R.mipmap.ic_admin, R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses,R.mipmap.ic_entertainment,R.mipmap.ic_action_campus};
+            R.mipmap.ic_launcher, R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses,R.mipmap.ic_entertainment,R.mipmap.ic_action_campus};
 
     public MyAdapter(Context context)
     {
