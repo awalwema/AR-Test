@@ -1,30 +1,45 @@
-<android.support.v4.widget.DrawerLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawerLayout"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_width="match_parent"
+    android:id="@+id/main_layout">
 
-    <RelativeLayout
-        android:id="@+id/mainContent"
+    <!-- main app layout -->
+    <android.support.v4.widget.DrawerLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </RelativeLayout>
-
-    <com.example.andrew.ar_test.camera.CameraSurface
-        android:id="@+id/cameraSurface"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
-
-    <ListView
-        android:background="#CCAC00"
-        android:divider="@null"
-        android:id="@+id/drawerList"
-        android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:layout_gravity="left">
+        tools:context=".MainActivity">
 
-    </ListView>
+        <com.example.andrew.ar_test.camera.CameraSurface
+            android:id="@+id/cameraSurface"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
 
-</android.support.v4.widget.DrawerLayout>
+        <ListView
+            android:background="#CCAC00"
+            android:divider="@null"
+            android:id="@+id/drawerList"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left">
+
+        </ListView>
+
+    </android.support.v4.widget.DrawerLayout>
+
+    <!-- help overlay layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#88666666"
+        android:id="@+id/help_overlay">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/helpoverlay"/>
+
+    </RelativeLayout>
+</FrameLayout>
