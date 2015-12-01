@@ -28,10 +28,12 @@ public class PaintableBoxedText extends PaintableObject {
     private int textColor = Color.rgb(255, 255, 255);
 
     public PaintableBoxedText(CharSequence txtInit, float fontSizeInit, float maxWidth) {
-        this(txtInit, fontSizeInit, maxWidth, Color.rgb(255, 255, 255), Color.argb(128, 0, 0, 0), Color.rgb(255, 255, 255));
+        this(txtInit, fontSizeInit, maxWidth, Color.rgb(255, 255, 255), Color.argb(128, 0, 0, 0),
+                Color.rgb(255, 255, 255));
     }
 
-    public PaintableBoxedText(CharSequence txtInit, float fontSizeInit, float maxWidth, int borderColor, int bgColor, int textColor) {
+    public PaintableBoxedText(CharSequence txtInit, float fontSizeInit, float maxWidth,
+                              int borderColor, int bgColor, int textColor) {
         set(txtInit, fontSizeInit, maxWidth, borderColor, bgColor, textColor);
     }
 
@@ -54,7 +56,8 @@ public class PaintableBoxedText extends PaintableObject {
      * @throws NullPointerException
      *             if String param is NULL.
      */
-    public void set(CharSequence txtInit, float fontSizeInit, float maxWidth, int borderColor, int bgColor, int textColor) {
+    public void set(CharSequence txtInit, float fontSizeInit, float maxWidth, int borderColor,
+                    int bgColor, int textColor) {
         if (txtInit == null) throw new NullPointerException();
 
         this.borderColor = borderColor;
