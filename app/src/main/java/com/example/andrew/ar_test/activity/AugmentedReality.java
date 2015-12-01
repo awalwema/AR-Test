@@ -1,6 +1,7 @@
 package com.example.andrew.ar_test.activity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -43,6 +44,7 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
 
     protected static WakeLock wakeLock = null;
     protected static CameraSurface camScreen = null;
+    protected static View topLevelLayout;
     protected static VerticalSeekBar myZoomBar = null;
     protected static VerticalTextView endLabel = null;
     protected static LinearLayout zoomLayout = null;
@@ -75,6 +77,11 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
         setContentView(R.layout.activity_main);
         camScreen = (CameraSurface) findViewById(R.id.cameraSurface);
 
+        //setting help overlay up
+        topLevelLayout = findViewById(R.id.help_overlay);
+        if(isFirstTime())
+            topLevelLayout.setVisibility(View.INVISIBLE);
+
         augmentedView = new AugmentedView(this);
         augmentedView.setOnTouchListener(this);
         LayoutParams augLayout = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -97,11 +104,13 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
         myZoomBar.setMax(100);
         myZoomBar.setProgress(50);
         myZoomBar.setOnSeekBarChangeListener(myZoomBarOnSeekBarChangeListener);
-        LinearLayout.LayoutParams zoomBarParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+        LinearLayout.LayoutParams zoomBarParams = new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
         zoomBarParams.gravity = Gravity.CENTER_HORIZONTAL;
         zoomLayout.addView(myZoomBar, zoomBarParams);
 
-        FrameLayout.LayoutParams frameLayoutParams = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT, Gravity.RIGHT);
+        FrameLayout.LayoutParams frameLayoutParams = new FrameLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT, Gravity.RIGHT);
         addContentView(zoomLayout, frameLayoutParams);
 
         updateDataOnZoom();
@@ -109,6 +118,33 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
 
+    }
+
+    /**
+     * Checks app for the first time use.
+     * @return true for first time, or false for any other time.
+     */
+    private boolean isFirstTime(){
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        boolean ranBefore = preferences.getBoolean("RanBefore", false);
+
+        if(!ranBefore) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("RanBefore", true);
+            editor.commit();
+
+            topLevelLayout.setVisibility(View.VISIBLE);
+            topLevelLayout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    topLevelLayout.setVisibility(View.INVISIBLE);
+
+                    return false;
+                }
+            });
+        }
+
+        return ranBefore;
     }
 
     /**
