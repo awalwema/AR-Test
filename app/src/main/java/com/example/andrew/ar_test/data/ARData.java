@@ -1,7 +1,9 @@
 package com.example.andrew.ar_test.data;
 
+import android.app.Activity;
 import android.location.Location;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.andrew.ar_test.common.Matrix;
 import com.example.andrew.ar_test.common.Orientation.ORIENTATION;
@@ -151,6 +153,9 @@ public abstract class ARData {
         }
         onLocationChanged(currentLocation);
     }
+
+
+
 
     private static void onLocationChanged(Location location) {
         Log.d(TAG, "New location, updating markers. location=" + location.toString());
