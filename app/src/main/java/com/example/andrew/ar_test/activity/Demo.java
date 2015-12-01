@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
 public class Demo extends AugmentedReality implements AdapterView.OnItemClickListener {
-	
+
     private static final String TAG = "Demo";
     private static final String locale = Locale.getDefault().getLanguage();
     private static final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(1);
@@ -56,7 +56,8 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     private DrawerLayout drawerLayout;
     private ListView listView;
 
-    private LocalDataSource localData;
+    private static LocalDataSource localData;
+    private LocalDataSource src;
 
     @SuppressWarnings("deprecation")
     private android.support.v4.app.ActionBarDrawerToggle drawerListener;
@@ -106,7 +107,9 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
 
         listView.setOnItemClickListener(this);
 
-        drawerListener = new android.support.v4.app.ActionBarDrawerToggle(this, drawerLayout, R.mipmap.ic_action_drawer_icon, R.string.drawer_open, R.string.drawer_close){
+        drawerListener = new android.support.v4.app.ActionBarDrawerToggle(this, drawerLayout,
+                R.mipmap.ic_action_drawer_icon, R.string.drawer_open, R.string.drawer_close)
+        {
             @Override
             public void onDrawerOpened(View drawerView) {
                 showRadar = false;
@@ -224,6 +227,10 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
             case 10:
                 radarType = 1;
                 break;
+            case 11:
+                double lat = ARData.getCurrentLocation().getLatitude();
+                double lon = ARData.getCurrentLocation().getLongitude();
+                localData.addParkingSpot(lat, lon);
             default:
                 Log.e("Filter out of range: ", "check invoking method.");
         }
@@ -237,13 +244,6 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
         listView.setItemChecked(position, true);
 
     }
-
-    public void setTitle(String title) //Shows selected title in action bar.
-    {
-        //getSupportActionBar().setTitle(title);
-    }
-
-
 
     /**
      * {@inheritDoc}
@@ -332,15 +332,17 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     }
 
     private void updateData() {
-        LocalDataSource localData = new LocalDataSource(this.getResources());
-
         if (radarType == 100)
         {
             ARData.addMarkers(localData.filterByName(markerName));
         }
-
         else {
-            ARData.addMarkers(localData.filterType(radarType));
+            if(localData==null) {
+                LocalDataSource temp = new LocalDataSource(this.getResources());
+                ARData.addMarkers(temp.filterType(radarType));
+            }
+            else
+                ARData.addMarkers(localData.filterType(radarType));
         }
     }
 }
@@ -350,7 +352,7 @@ class MyAdapter extends BaseAdapter
     private Context context;
     String[] categorySites;
     int[] images = {R.mipmap.ic_search,R.mipmap.ic_library, R.mipmap.ic_utilities,R.mipmap.ic_sports, R.mipmap.ic_sight_seeing,
-            R.mipmap.ic_launcher, R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses,R.mipmap.ic_entertainment,R.mipmap.ic_action_campus};
+            R.mipmap.ic_launcher, R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses,R.mipmap.ic_entertainment,R.mipmap.ic_action_campus,R.mipmap.car72};
 
     public MyAdapter(Context context)
     {

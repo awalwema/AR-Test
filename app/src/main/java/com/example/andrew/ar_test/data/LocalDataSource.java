@@ -34,6 +34,8 @@ public class LocalDataSource extends DataSource {
     private static Bitmap iconEN = null;
     private static Bitmap iconUtil = null;
     private static Bitmap iconSightS = null;
+    private static Bitmap iconPark = null;
+
 
     public LocalDataSource(Resources res) {
         if (res == null) throw new NullPointerException();
@@ -55,6 +57,8 @@ public class LocalDataSource extends DataSource {
         iconEN = BitmapFactory.decodeResource(res, R.mipmap.ic_entertainment);
         iconUtil =BitmapFactory.decodeResource(res, R.mipmap.ic_utilities);
         iconSightS = BitmapFactory.decodeResource(res, R.mipmap.ic_sight_seeing);
+        iconPark = BitmapFactory.decodeResource(res, R.mipmap.car72);
+
     }
 
     private void setMarkers(){
@@ -294,7 +298,7 @@ public class LocalDataSource extends DataSource {
 
         for(int i=0; i<cachedMarkers.size(); i++)
         {
-            if(cachedMarkers.get(i).getType()%type==0)
+            if(cachedMarkers.get(i).getType()%type==0 || cachedMarkers.get(i).getName().equalsIgnoreCase("Parking Spot"))
                 temp.add(cachedMarkers.get(i));
         }
 
@@ -313,6 +317,12 @@ public class LocalDataSource extends DataSource {
         }
 
         return temp2;
+    }
+
+
+    public void addParkingSpot(double la, double lo){
+        IconMarker parkingSpot = new IconMarker("Parking Spot", la, lo, 0, Color.YELLOW, 0, iconPark);
+        cachedMarkers.add(parkingSpot);
     }
 
     public JSONObject getInfo()
