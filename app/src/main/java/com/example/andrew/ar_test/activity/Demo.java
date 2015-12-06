@@ -30,12 +30,6 @@ import com.example.andrew.ar_test.ui.Marker;
 import com.example.andrew.ar_test.widget.VerticalTextView;
 import com.jwetherell.augmented_reality.R;
 
-import java.util.Locale;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 /**
  * This class extends the AugmentedReality and is designed to be an example on
  * how to extends the AugmentedReality class to show multiple data sources.
@@ -45,10 +39,6 @@ import java.util.concurrent.TimeUnit;
 public class Demo extends AugmentedReality implements AdapterView.OnItemClickListener {
 
     private static final String TAG = "Demo";
-    private static final String locale = Locale.getDefault().getLanguage();
-    private static final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(1);
-    private static final ThreadPoolExecutor exeService =
-            new ThreadPoolExecutor(1, 1, 20, TimeUnit.SECONDS, queue);
 
     private static Toast myToast = null;
     private static VerticalTextView text = null;
@@ -57,7 +47,6 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     private ListView listView;
 
     private static LocalDataSource localData;
-    private LocalDataSource src;
 
     @SuppressWarnings("deprecation")
     private android.support.v4.app.ActionBarDrawerToggle drawerListener;
@@ -84,6 +73,7 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
         // Create toast
         myToast = new Toast(getApplicationContext());
         myToast.setGravity(Gravity.CENTER, 0, 0);
+
         // Creating our custom text view, and setting text/rotation
         text = new VerticalTextView(getApplicationContext());
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -92,6 +82,7 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
         text.setTextAppearance(getApplicationContext(), android.R.style.TextAppearance_Small);
         text.setShadowLayer(2.75f, 0f, 0f, Color.parseColor("#BB000000"));
         myToast.setView(text);
+
         // Setting duration and displaying the toast
         myToast.setDuration(Toast.LENGTH_SHORT);
 
@@ -123,8 +114,6 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
         drawerLayout.setDrawerListener(drawerListener);
 
         System.currentTimeMillis();
-
-
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id){
@@ -132,57 +121,27 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
 
         switch (position){
             case 0:
-                final CharSequence places[] = new CharSequence[] {"Anibal House", "Ann V. Nicholson Student Apartments","Athletics Center O'Rena",
-                        "Bear Lake",
-                        "Belgian Barn",
-                        "Buildings and Grounds Maintenance",
-                        "Carriage House",
-                        "Central Heating Plant",
-                        "Danny's Cabin",
-                        "Dodge Hall",
-                        "Electrical Substation",
-                        "Elliot Tower",
-                        "Elliott Hall",
-                        "Engineering Center",
-                        "Facilities Management",
-                        "Fitzgerald House",
-                        "George T. Matthews Apartments",
-                        "Golf Course Clubhouse and Pro Shop",
-                        "Graham Health Center",
-                        "Grizzly Oaks Disc Golf Course",
-                        "Hamlin Hall",
-                        "Hannah Hall",
-                        "Hill House",
-                        "Human Health Building",
-                        "John Dodge House",
-                        "Kettering Magnetics Lab",
-                        "Kresge Library",
-                        "Mathematics and Science Center",
-                        "Meadow Brook Greenhouse",
-                        "Meadow Brook Hall & Gardens",
-                        "Meadow Brook Music Festival",
-                        "Meadow Brook Theatre",
-                        "North Foundation Hall",
-                        "O'Dowd Hall",
-                        "Oak View Hall",
-                        "Oakland Baseball Field",
-                        "Oakland Center",
-                        "Observatory",
-                        "Pawley Hall",
-                        "Pioneer Field (Lower)",
-                        "Police and Support Services Building",
-                        "Pryale House",
-                        "Shotwell-Gustafson Pavilion",
-                        "South Foundation Hall",
-                        "Storage Facility",
-                        "Sunset Terrace",
-                        "Rec Center",
-                        "Recreation and Athletic Complex",
-                        "Van Wagoner House",
-                        "Vandenberg Hall",
-                        "Varner Hall",
-                }
-                        ;
+                final CharSequence places[] = new CharSequence[] {"Anibal House",
+                        "Ann V. Nicholson Student Apartments","Athletics Center O'Rena",
+                        "Bear Lake", "Belgian Barn", "Buildings and Grounds Maintenance",
+                        "Carriage House", "Central Heating Plant", "Danny's Cabin",
+                        "Dodge Hall", "Electrical Substation", "Elliot Tower",
+                        "Elliott Hall", "Engineering Center", "Facilities Management",
+                        "Fitzgerald House", "George T. Matthews Apartments",
+                        "Golf Course Clubhouse and Pro Shop", "Graham Health Center",
+                        "Grizzly Oaks Disc Golf Course", "Hamlin Hall", "Hannah Hall",
+                        "Hill House", "Human Health Building", "John Dodge House",
+                        "Kettering Magnetics Lab", "Kresge Library",
+                        "Mathematics and Science Center", "Meadow Brook Greenhouse",
+                        "Meadow Brook Hall & Gardens", "Meadow Brook Music Festival",
+                        "Meadow Brook Theatre", "North Foundation Hall", "O'Dowd Hall",
+                        "Oak View Hall", "Oakland Baseball Field", "Oakland Center",
+                        "Observatory", "Pawley Hall", "Pioneer Field (Lower)",
+                        "Police and Support Services Building", "Pryale House",
+                        "Shotwell-Gustafson Pavilion", "South Foundation Hall",
+                        "Storage Facility", "Sunset Terrace", "Rec Center",
+                        "Recreation and Athletic Complex", "Van Wagoner House",
+                        "Vandenberg Hall", "Varner Hall"};
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Pick a location");
@@ -242,7 +201,6 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     private void selectItem(int position)
     {
         listView.setItemChecked(position, true);
-
     }
 
     /**
@@ -252,8 +210,7 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     public void onStart() {
         super.onStart();
 
-        Location last = ARData.getCurrentLocation();
-        //initialUpdateData(last.getLatitude(), last.getLongitude(), last.getAltitude());
+        ARData.getCurrentLocation();
     }
 
     /**
@@ -311,14 +268,12 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
         text.setText(marker.getName());
         myToast.show();
         showOneMarker(marker.getName());
-
-
     }
 
     protected void showOneMarker(String name) {
         markerName = name;
         ARData.addMarkers(localData.filterByName(markerName));
-        radarType =100;
+        radarType = 100;
     }
 
     /**
@@ -327,7 +282,8 @@ public class Demo extends AugmentedReality implements AdapterView.OnItemClickLis
     @Override
     protected void updateDataOnZoom() {
         super.updateDataOnZoom();
-        Location last = ARData.getCurrentLocation();
+
+        ARData.getCurrentLocation();
         updateData();
     }
 
@@ -351,8 +307,10 @@ class MyAdapter extends BaseAdapter
 {
     private Context context;
     String[] categorySites;
-    int[] images = {R.mipmap.ic_search,R.mipmap.ic_library, R.mipmap.ic_utilities,R.mipmap.ic_sports, R.mipmap.ic_sight_seeing,
-            R.mipmap.ic_launcher, R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses,R.mipmap.ic_entertainment,R.mipmap.ic_action_campus,R.mipmap.car72};
+    int[] images = {R.mipmap.ic_search,R.mipmap.ic_library, R.mipmap.ic_utilities,
+            R.mipmap.ic_sports, R.mipmap.ic_sight_seeing, R.mipmap.ic_launcher,
+            R.mipmap.ic_education, R.mipmap.ic_lab, R.mipmap.ic_houses, R.mipmap.ic_entertainment,
+            R.mipmap.ic_action_campus, R.mipmap.car72};
 
     public MyAdapter(Context context)
     {

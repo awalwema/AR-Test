@@ -96,7 +96,8 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
         endLabel = new VerticalTextView(this);
         endLabel.setText(END_TEXT);
         endLabel.setTextColor(END_TEXT_COLOR);
-        LinearLayout.LayoutParams zoomTextParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams zoomTextParams = new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         zoomTextParams.gravity = Gravity.CENTER;
         zoomLayout.addView(endLabel, zoomTextParams);
 
@@ -174,7 +175,8 @@ public class AugmentedReality extends SensorsActivity implements OnTouchListener
     public void onSensorChanged(SensorEvent evt) {
         super.onSensorChanged(evt);
 
-        if (evt.sensor.getType() == Sensor.TYPE_ACCELEROMETER || evt.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+        if (evt.sensor.getType() == Sensor.TYPE_ACCELEROMETER ||
+                evt.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             augmentedView.postInvalidate();
         }
     }
